@@ -16,7 +16,7 @@ struct SavedImagesView: View {
                 ForEach(viewModel.allSaveimages, id: \.id) { savedImage in
                    VStack {
                        NavigationLink {
-                           SwitchImagesView(savedImage: savedImage)
+                           SwitchImagesView(viewModel: viewModel.allSaveimages, savedImage: savedImage)
                        } label: {
                            ZStack(alignment: .topTrailing) {
                                Image(uiImage: savedImage.isShowingOriginal ? savedImage.originalImage: savedImage.blurredImage)
@@ -34,16 +34,17 @@ struct SavedImagesView: View {
                                })
                            }
                        }
-
-
-
                     }
                     .frame(height: 200)
                     .padding(.all, 4)
                 }
             }
 
-        }.padding(.leading, 4)
+        }
+        .onAppear {
+
+        }
+        .padding(.leading, 4)
         .padding(.trailing, 4)
     }
 }

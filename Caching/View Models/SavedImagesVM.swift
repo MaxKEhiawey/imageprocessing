@@ -29,6 +29,7 @@ class SavedImagesVM: ObservableObject {
             
             token = results.observe({ [weak self] changes in
                 self?.allSaveimages = results.map(SavedImage.init)
+               
             })
         } catch let error {
             print(error)
