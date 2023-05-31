@@ -19,7 +19,7 @@ struct SavedImagesView: View {
                            SwitchImagesView(viewModel: viewModel.allSaveimages, savedImage: savedImage)
                        } label: {
                            ZStack(alignment: .topTrailing) {
-                               Image(uiImage: savedImage.isShowingOriginal ? savedImage.originalImage: savedImage.blurredImage)
+                               Image(uiImage: savedImage.processedImage)
                                    .resizable()
                                Button(action: {
                                    viewModel.remove(id: savedImage.id)

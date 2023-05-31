@@ -14,12 +14,8 @@ class SavedImageObject: Object, Identifiable {
     @Persisted var _originalImageData: Data
     @Persisted var _blurredImageData: Data
     @Persisted var isShowingOriginal: Bool
-    var originalImage: UIImage {
-        get { UIImage(data: _originalImageData) ?? UIImage() }
-        set { _originalImageData = newValue.pngData() ?? Data() }
-    }
 
-    var blurredImage: UIImage {
+    var processedImage: UIImage {
         get { UIImage(data: _blurredImageData) ?? UIImage() }
         set { _blurredImageData = newValue.pngData() ?? Data() }
     }

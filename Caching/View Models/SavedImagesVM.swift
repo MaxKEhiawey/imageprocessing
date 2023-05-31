@@ -65,11 +65,9 @@ class SavedImagesVM: ObservableObject {
     }
 
         // Update image toggle
-    func saveImage(blurredImage: UIImage, originalImage: UIImage, isShowingOriginal: Bool = true) {
+    func saveImage(processedImage: UIImage) {
         let image = SavedImageObject()
-        image.blurredImage = blurredImage
-        image.originalImage = originalImage
-        image.isShowingOriginal = isShowingOriginal
+        image.processedImage = processedImage
         $savedImagesList.append(image)
     }
 }

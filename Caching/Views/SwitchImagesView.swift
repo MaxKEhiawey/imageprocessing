@@ -18,18 +18,7 @@ struct SwitchImagesView: View {
     var body: some View {
         VStack {
             Spacer()
-            Picker(selection: $selectedSegment, label: Text("Switch Images")) {
-                Text("Original").tag(0)
-                Text("Blur").tag(1)
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .onChange(of: selectedSegment) { newValue in
-                print("SWITCH <>><>number", selectedSegment )
-                switchImage()
-            }
-            .padding(.leading, 20)
-            .padding(.trailing, 20)
-            Image(uiImage: isOriginalImage ? viewModel[index].originalImage: viewModel[index].blurredImage)
+            Image(uiImage: viewModel[index].processedImage)
                 .resizable()
                 .clipShape(RoundedRectangle(cornerRadius: 15))
                 .frame(height: 400)
@@ -99,19 +88,5 @@ struct SwitchImagesView: View {
                 }
             }
         }
-    }
-    func switchImage() {
-        print("SWITCH number", selectedSegment )
-        DispatchQueue.main.async {
-            switch selectedSegment {
-                case 0:
-                    isOriginalImage = true
-                case 1:
-                    isOriginalImage = false
-                default:
-                    print("Wrong number")
-            }
-        }
-
     }
 }
