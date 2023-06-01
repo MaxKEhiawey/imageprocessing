@@ -25,7 +25,7 @@ struct SwitchImagesView: View {
                 .padding()
             Spacer()
         }
-        .offset(x: isSwipedLeft ? 200 : isSwipedRight ? -200 : 0)
+        .offset(x: isSwipedLeft ? 20 : isSwipedRight ? -20 : 0)
         .gesture(
             DragGesture()
                 .onEnded { gesture in

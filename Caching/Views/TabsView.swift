@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TabsView: View {
-    @State private var selectedTab = 0
+    @State  var selectedTab = 0
     var body: some View {
         TabView(selection: $selectedTab) {
             ImageListView()
@@ -25,6 +25,7 @@ struct TabsView: View {
             }
             .tag(1)
     }
+    .navigationBarBackButtonHidden(true)
     }
 }
 

@@ -11,23 +11,6 @@ import CoreImage
 
 class ImageUtilities: ObservableObject {
     var images: [UIImage] = []
-    func gaussianBlur(image: UIImage, blurRadius: CGFloat) -> UIImage {
-        guard let ciImage =  CIImage(image: image), let ciFilter = CIFilter(name: "CIMotionBlur") else {
-            return image
-        }
-
-        ciFilter.setValue(blurRadius, forKey: kCIInputRadiusKey)
-        ciFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        ciFilter.setValue(130.0, forKey: kCIInputAngleKey)
-        let outputImage = ciImage.applyingGaussianBlur(sigma: blurRadius)
-
-        let context = CIContext(options: nil)
-
-        guard let cgImage = context.createCGImage(outputImage, from: outputImage.extent) else {
-            return image
-        }
-        return UIImage(cgImage: cgImage)
-    }
 
     func applyMotionBlur(to image: UIImage, blurRadius: CGFloat, angle: CGFloat) -> UIImage {
         guard let ciImage = CIImage(image: image),
@@ -131,29 +114,32 @@ class ImageUtilities: ObservableObject {
         return newImage
     }
     func changeImageOrientation(_ image: UIImage, to orientation: UIInterfaceOrientation) -> UIImage? {
-        guard let cgImage = image.cgImage else {
-            return nil
-        }
 
-        var transform: CGAffineTransform
+        guard let cgImage = image.cgImage else { return nil }
+
+        var transform: CGAffineTransform = .identity
+
         switch orientation {
             case .portrait:
                 transform = CGAffineTransform.identity
-            case .landscapeLeft:
-                transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-            case .landscapeRight:
-                transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
             case .portraitUpsideDown:
-                transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-            default:
                 transform = CGAffineTransform.identity
+            case .landscapeRight:
+                transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+            case .landscapeLeft:
+                transform = CGAffineTransform.identity
+            default:
+                return nil
         }
 
-        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
-        let context = UIGraphicsGetCurrentContext()
+        let size = CGSize(width: image.size.width, height: image.size.height)
+        let scale = image.scale
 
-        context?.concatenate(transform)
-        context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+
+        context.concatenate(transform)
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
 
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
