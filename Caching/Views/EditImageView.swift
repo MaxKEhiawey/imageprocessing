@@ -181,17 +181,17 @@ struct EditImageView: View {
                 }
                 .padding(.horizontal, 20)
             }
-            Spacer()
-        }
-        .navigationDestination(isPresented: $isGoingBack) {
-            TabsView(selectedTab: 1)
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink {
-                    SavedImagesView()
-                } label: {
-                    Text("Saved Images")
+            .navigationDestination(isPresented: $isGoingBack) {
+                SavedImagesView(pageTitle: "")
+                //TabsView(selectedTab: 1)
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        SavedImagesView(pageTitle: "")
+                    } label: {
+                        Text("Saved Images")
+                    }
                 }
             }
         }
