@@ -150,12 +150,23 @@ struct EditImageView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 12)
-            }
-            Image(uiImage: myUIImage)
-                .resizable()
-                .clipShape(RoundedRectangle(cornerRadius: 15))
-                .frame(height: 400)
+                Image(uiImage: myUIImage)
+                    .resizable()
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .frame(height: 400)
+                    .padding()
+                Slider(value: $zoomScale, in: 0.1...5.0, step: 0.05, onEditingChanged: { editing in
+                        // Perform action when slider value changes
+
+                    if editing && zoomScale > 1.0 {
+                      //  processImage(processType: .zoomImage)
+                            // Slider value is being edited
+                        print("Slider value editing started")
+                    } else {
+                            // Slider value editing finished
+                        print("Slider value editing finished")
+                    }
+                })
                 .padding()
             Slider(value: $zoomScale, in: 0.1...5.0, step: 0.05, onEditingChanged: { editing in
                     // Perform action when slider value changes

@@ -13,15 +13,15 @@ struct TabsView: View {
         TabView(selection: $selectedTab) {
             ImageListView()
             .tabItem {
-                Image(systemName: "photo")
-                Text("List")
+                Image(systemName: "house")
+                Text("Home")
             }
             .tag(0)
 
             SavedImagesView()
             .tabItem {
                 Image(systemName: "photo")
-                Text("Saved")
+                Text("Saved images")
             }
             .tag(1)
     }
