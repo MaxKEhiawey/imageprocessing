@@ -1,9 +1,9 @@
-//
-//  SwitchImagesView.swift
-//  Caching
-//
-//  Created by AMALITECH MACBOOK on 30/05/2023.
-//
+    //
+    //  SwitchImagesView.swift
+    //  Caching
+    //
+    //  Created by AMALITECH MACBOOK on 30/05/2023.
+    //
 
 import SwiftUI
 
@@ -53,16 +53,11 @@ struct SwitchImagesView: View {
             withAnimation {
                 isSwipedLeft = true
             }
-                // Perform other actions for swipe left
-            print("Swiped left")
-
-                // Reset state after animation
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation {
                     isSwipedLeft = false
                     if index > 0 {
                         index = index - 1
-                        print( "Left Index: \(index)")
                     }
                 }
             }
@@ -72,17 +67,17 @@ struct SwitchImagesView: View {
             // Swiped right
         let limit = viewModel.count-1
         if index < limit {
-        withAnimation {
-            isSwipedRight = true
-        }
-            // Perform other actions for swipe right
-        print("Swiped right")
-
-            // Reset state after animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             withAnimation {
-                isSwipedRight = false
-                    // Swiped right
+                isSwipedRight = true
+            }
+                // Perform other actions for swipe right
+            print("Swiped right")
+
+                // Reset state after animation
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation {
+                    isSwipedRight = false
+                        // Swiped right
                     index = index + 1
                     print( "right Index: \(index)")
                 }

@@ -23,311 +23,204 @@ struct EditImageView: View {
 
     var body: some View {
 
-            VStack {
-                Spacer()
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 16) {
-                        
-                        createCapsuleButton(label: "Blur image") {
-                            processImage(processType: .blurImage)
-                        }
-                        
-                        Menu(content: {
-                            Button(action: {
-                                processImage(processType: .addFrame(type: .blackFrame))
-                            }, label:  {
-                                Text("BlackFrame")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .addFrame(type: .darkWood))
-                            }, label:  {
-                                Text("DarkWoodFrame")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .addFrame(type: .goldFrame))
-                            }, label:  {
-                                Text("GoldFrame")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .addFrame(type: .lightWood))
-                            }, label:  {
-                                Text("LightWoodFrame")
-                                    .foregroundColor(.blue)
-                            })
-                        }) {
-                            Button(action: {
-                                
-                            }, label:  {
-                                Text("Select a frame")
-                                    .frame(height: 10)
-                                    .padding(8)
-                                    .foregroundColor(.white)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color.blue)
-                                    )
-                            })
-                        }
-                        Menu(content: {
-                            Button(action: {
-                                processImage(processType: .orientation(orientation: .portrait))
-                            }, label:  {
-                                Text("Portrait")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .orientation(orientation: .portraitUpsideDown))
-                            }, label:  {
-                                Text("Portrait UpsideDown")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .orientation(orientation: .landscapeLeft))
-                            }, label:  {
-                                Text("Landscape Left")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .orientation(orientation: .landscapeLeft))
-                            }, label:  {
-                                Text("Landscape Right")
-                                    .foregroundColor(.blue)
-                            })
-                        }) {
-                            Button(action: {
-                                
-                            }, label:  {
-                                Text("Select Orient")
-                                    .frame(height: 10)
-                                    .padding(8)
-                                    .foregroundColor(.white)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color.blue)
-                                    )
-                            })
-                        }
-                        Menu(content: {
-                            Button(action: {
-                                processImage(processType: .rotation(rotation: .up))
-                            }, label:  {
-                                Text("Up")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .rotation(rotation: .down))
-                            }, label:  {
-                                Text("Down")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .rotation(rotation: .left))
-                            }, label:  {
-                                Text("Left")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .rotation(rotation: .right))
-                            }, label:  {
-                                Text("Right")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .rotation(rotation: .upMirrored))
-                            }, label:  {
-                                Text("Up Mirrored")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .rotation(rotation: .downMirrored))
-                            }, label:  {
-                                Text("Down Mirrored")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .rotation(rotation: .leftMirrored))
-                            }, label:  {
-                                Text("Left Mirrored")
-                                    .foregroundColor(.blue)
-                            })
-                            Button(action: {
-                                processImage(processType: .rotation(rotation: .rightMirrored))
-                            }, label:  {
-                                Text("Right Mirrored")
-                                    .foregroundColor(.blue)
-                            })
-                        }) {
-                            Button(action: {
-                                
-                            }, label:  {
-                                Text("Rotate")
-                                    .frame(height: 10)
-                                    .padding(8)
-                                    .foregroundColor(.white)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color.blue)
-                                    )
-                            })
-                        }
-                        createCapsuleButton(label: "Zoom image 1") {
-                            guard zoomScale > 0 else {return}
-                            zoomScale += 1
-                            if let zoomedImage = imgUtility.applyZoomEffect(image: myUIImage, zoomScale: zoomScale) {
-                                myUIImage = zoomedImage
-                            }
-                        }
-                        createCapsuleButton(label: "Zoom image 2") {
-                            guard zoomScale > 0 else {return}
-                            zoomScale -= 1
-                            if let zoomedImage = imgUtility.applyZoomEffect(image: myUIImage, zoomScale: zoomScale) {
-                                myUIImage = zoomedImage
-                            }
+        VStack {
+            Spacer()
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+
+                    createCapsuleButton(label: "Blur image") {
+                        processImage(processType: .blurImage)
+                    }
+
+                    Menu(content: {
+                        Button(action: {
+                            processImage(processType: .addFrame(type: .blackFrame))
+                        }, label:  {
+                            Text("BlackFrame")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .addFrame(type: .darkWood))
+                        }, label:  {
+                            Text("DarkWoodFrame")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .addFrame(type: .goldFrame))
+                        }, label:  {
+                            Text("GoldFrame")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .addFrame(type: .lightWood))
+                        }, label:  {
+                            Text("LightWoodFrame")
+                                .foregroundColor(.blue)
+                        })
+                    }) {
+                        Button(action: {
+
+                        }, label:  {
+                            Text("Select a frame")
+                                .frame(height: 10)
+                                .padding(8)
+                                .foregroundColor(.white)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.blue)
+                                )
+                        })
+                    }
+
+                    Menu(content: {
+                        Button(action: {
+                            processImage(processType: .orientation(orientation: .up))
+                        }, label:  {
+                            Text("Up")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .orientation(orientation: .down))
+                        }, label:  {
+                            Text("Down")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .orientation(orientation: .left))
+                        }, label:  {
+                            Text("Left")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .orientation(orientation: .right))
+                        }, label:  {
+                            Text("Right")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .orientation(orientation: .upMirrored))
+                        }, label:  {
+                            Text("Up Mirrored")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .orientation(orientation: .downMirrored))
+                        }, label:  {
+                            Text("Down Mirrored")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .orientation(orientation: .leftMirrored))
+                        }, label:  {
+                            Text("Left Mirrored")
+                                .foregroundColor(.blue)
+                        })
+                        Button(action: {
+                            processImage(processType: .orientation(orientation: .rightMirrored))
+                        }, label:  {
+                            Text("Right Mirrored")
+                                .foregroundColor(.blue)
+                        })
+                    }) {
+                        Button(action: {
+
+                        }, label:  {
+                            Text("Select Orient")
+                                .frame(height: 10)
+                                .padding(8)
+                                .foregroundColor(.white)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.blue)
+                                )
+                        })
+                    }
+                    createCapsuleButton(label: "Zoom image 1") {
+                        guard zoomScale > 0 else {return}
+                        zoomScale += 1
+                        if let zoomedImage = imgUtility.applyZoomEffect(image: myUIImage, zoomScale: zoomScale) {
+                            myUIImage = zoomedImage
                         }
                     }
-                    .padding(.horizontal, 12)
+                    createCapsuleButton(label: "Zoom image 2") {
+                        guard zoomScale > 0 else {return}
+                        zoomScale -= 1
+                        if let zoomedImage = imgUtility.applyZoomEffect(image: myUIImage, zoomScale: zoomScale) {
+                            myUIImage = zoomedImage
+                        }
+                    }
                 }
-                Image(uiImage: myUIImage)
-                    .resizable()
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
-                    .frame(height: 400)
-                    .padding()
-                Slider(value: $zoomScale, in: 0.1...5.0, step: 0.05, onEditingChanged: { editing in
-                        // Perform action when slider value changes
-                    processImage(processType: .zoomImage)
-                    if editing && zoomScale > 1.0 {
-                        processImage(processType: .zoomImage)
-                            // Slider value is being edited
-                        print("Slider value editing started")
-                    } else {
-                            // Slider value editing finished
-                        print("Slider value editing finished")
-                    }
-                })
+                .padding(.horizontal, 12)
+            }
+            Image(uiImage: myUIImage)
+                .resizable()
+                .clipShape(RoundedRectangle(cornerRadius: 15))
+                .frame(height: 400)
                 .padding()
-                HStack {
-                    createCapsuleButton(label: "Revert to Original") {
-                        processImage(processType: .originalImage)
-                    }
-                    createCapsuleButton(label: "Save Image") {
-                        processImage(processType: .saveImage)
+            Slider(value: $zoomScale, in: 0.1...5.0, step: 0.05, onEditingChanged: { editing in
+                    // Perform action when slider value changes
+                processImage(processType: .zoomImage)
+                if editing && zoomScale > 1.0 {
+                    processImage(processType: .zoomImage)
+                        // Slider value is being edited
+                    print("Slider value editing started")
+                } else {
+                        // Slider value editing finished
+                    print("Slider value editing finished")
+                }
+            })
+            .padding()
+            HStack {
+                createCapsuleButton(label: "Revert to Original") {
+                    processImage(processType: .originalImage)
+                }
+                createCapsuleButton(label: "Save Image") {
+                    processImage(processType: .saveImage)
                         //presentationMode.wrappedValue.dismiss()
-                        isGoingBack = true
-                    }
-                    .padding(.horizontal, 20)
+                    isGoingBack = true
                 }
-                Spacer()
+                .padding(.horizontal, 20)
             }
-            .navigationDestination(isPresented: $isGoingBack) {
-                TabsView(selectedTab: 1)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        SavedImagesView()
-                    } label: {
-                        Text("Saved Images")
-                    }
-                }
-            }
-            .onAppear {
-                if let activeImage = imageLoader.image {
-                    self.myUIImage = activeImage
+            Spacer()
+        }
+        .navigationDestination(isPresented: $isGoingBack) {
+            TabsView(selectedTab: 1)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink {
+                    SavedImagesView()
+                } label: {
+                    Text("Saved Images")
                 }
             }
-            .navigationTitle("Edit Image")
+        }
+        .onAppear {
+            if let activeImage = imageLoader.image {
+                self.myUIImage = activeImage
+            }
+        }
+        .navigationTitle("Edit Image")
 
     }
     private func processImage(processType: ImageProcessings) {
         if let activeImage = imageLoader.image {
             DispatchQueue.global().async {
-
                 DispatchQueue.main.async {
                     switch processType {
                         case .addFrame(type: let type):
-                            switch type {
-                                case .blackFrame:
-                                    addFrame(frame: .blackFrame)
-                                case .darkWood:
-                                    addFrame(frame: .darkWood)
-                                case .goldFrame:
-                                    addFrame(frame: .goldFrame)
-                                case .lightWood:
-                                    addFrame(frame: .lightWood)
-                            }
+                            selectFrame(type)
                         case .blurImage:
                             if let imageBlur = imgUtility.applyBlurToImage(activeImage, withRadius: 10.0) {
                                 myUIImage = imageBlur
                             }
                         case .orientation(orientation: let orientation):
-                            switch orientation {
-                                case .portrait:
-                                    if let imageOrientation = imgUtility.changeImageOrientation(myUIImage, to: .portrait) {
-                                        myUIImage = imageOrientation
-                                    }
-                                case .portraitUpsideDown:
-                                    if let imageOrientation = imgUtility.changeImageOrientation(myUIImage, to: .portraitUpsideDown) {
-                                        myUIImage = imageOrientation
-                                    }
-                                case .landscapeLeft:
-                                    if let imageOrientation = imgUtility.changeImageOrientation(myUIImage, to: .landscapeLeft) {
-                                        myUIImage = imageOrientation
-                                    }
-                                case .landscapeRight:
-                                    if let imageOrientation = imgUtility.changeImageOrientation(myUIImage, to: .landscapeRight) {
-                                        myUIImage = imageOrientation
-                                    }
-                                case .unknown:
-                                    print("wrong option")
-                                @unknown default:
-                                    print("Unknown option")
-                            }
-
-                        case .rotation(let rotation):
-                            switch rotation {
-                                case .left:
-                                    if let transformedImage = imgUtility.rotationImage(image: myUIImage, rotation: .left) {
-                                        myUIImage = transformedImage
-                                    }
-                                case .up:
-                                    if let transformedImage = imgUtility.rotationImage(image: myUIImage, rotation: .up) {
-                                        myUIImage = transformedImage
-                                    }
-                                case .down:
-                                    if let transformedImage = imgUtility.rotationImage(image: activeImage, rotation: .down) {
-                                        myUIImage = transformedImage
-                                    }
-                                case .right:
-                                    if let transformedImage = imgUtility.rotationImage(image: activeImage, rotation: .right) {
-                                        myUIImage = transformedImage
-                                    }
-                                case .upMirrored:
-                                    if let transformedImage = imgUtility.rotationImage(image: myUIImage, rotation: .upMirrored) {
-                                        myUIImage = transformedImage
-                                    }
-                                case .downMirrored:
-                                    if let transformedImage = imgUtility.rotationImage(image: myUIImage, rotation: .downMirrored) {
-                                        myUIImage = transformedImage
-                                    }
-                                case .leftMirrored:
-                                    if let transformedImage = imgUtility.rotationImage(image: myUIImage, rotation: .leftMirrored) {
-                                        myUIImage = transformedImage
-                                    }
-                                case .rightMirrored:
-                                    if let transformedImage = imgUtility.rotationImage(image: myUIImage, rotation: .rightMirrored) {
-                                        myUIImage = transformedImage
-                                    }
-                                @unknown default:
-                                    print("Unknown move")
-                            }
+                            selectOrientation(orientation, activeImage)
                         case .originalImage:
                             myUIImage = activeImage
                         case .zoomImage:
                             if let zoomedImage = imgUtility.applyZoomEffect(image: activeImage, zoomScale: zoomScale) {
-                                myUIImage = myUIImage
+                                myUIImage = zoomedImage
                             }
                         case .saveImage:
                             savedImagesViewModel.saveImage(processedImage: myUIImage)
@@ -356,15 +249,66 @@ struct EditImageView: View {
             }
         }
     }
+
+    func selectFrame(_ type: Frames) {
+        switch type {
+            case .blackFrame:
+                addFrame(frame: .blackFrame)
+            case .darkWood:
+                addFrame(frame: .darkWood)
+            case .goldFrame:
+                addFrame(frame: .goldFrame)
+            case .lightWood:
+                addFrame(frame: .lightWood)
+        }
+    }
+    func selectOrientation(_ orientation: UIImage.Orientation, _ image: UIImage) {
+        switch orientation {
+            case .left:
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .left) {
+                    myUIImage = transformedImage
+                }
+            case .up:
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .up) {
+                    myUIImage = transformedImage
+                }
+            case .down:
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .down) {
+                    myUIImage = transformedImage
+                }
+            case .right:
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .right) {
+                    myUIImage = transformedImage
+                }
+            case .upMirrored:
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .upMirrored) {
+                    myUIImage = transformedImage
+                }
+            case .downMirrored:
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .downMirrored) {
+                    myUIImage = transformedImage
+                }
+            case .leftMirrored:
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .leftMirrored) {
+                    myUIImage = transformedImage
+                }
+            case .rightMirrored:
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .rightMirrored) {
+                    myUIImage = transformedImage
+                }
+            @unknown default:
+                print("Unknown move")
+        }
+
+    }
     func getImageDimensions(image: UIImage) -> (width: CGFloat, height: CGFloat)? {
         let imageSize = image.size
         let scale = image.scale
-
         let width = imageSize.width * scale
         let height = imageSize.height * scale
-
         return (width, height)
     }
+
     func createCapsuleButton(label: String, action: @escaping () -> Void) -> some View {
         return Button(action: action) {
             Text(label)
@@ -381,8 +325,7 @@ struct EditImageView: View {
 enum ImageProcessings {
     case addFrame(type: Frames)
     case blurImage
-    case rotation(rotation: UIImage.Orientation)
-    case orientation(orientation: UIInterfaceOrientation)
+    case orientation(orientation: UIImage.Orientation)
     case originalImage
     case zoomImage
     case saveImage
