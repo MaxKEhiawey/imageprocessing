@@ -150,29 +150,17 @@ struct EditImageView: View {
                         }
                     }
                 }
-                Image(uiImage: myUIImage)
-                    .resizable()
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
-                    .frame(height: 400)
-                    .padding()
-                Slider(value: $zoomScale, in: 0.1...5.0, step: 0.05, onEditingChanged: { editing in
-                        // Perform action when slider value changes
-
-                    if editing && zoomScale > 1.0 {
-                      //  processImage(processType: .zoomImage)
-                            // Slider value is being edited
-                        print("Slider value editing started")
-                    } else {
-                            // Slider value editing finished
-                        print("Slider value editing finished")
-                    }
-                })
+            }
+            Image(uiImage: myUIImage)
+                .resizable()
+                .clipShape(RoundedRectangle(cornerRadius: 15))
+                .frame(height: 400)
                 .padding()
             Slider(value: $zoomScale, in: 0.1...5.0, step: 0.05, onEditingChanged: { editing in
                     // Perform action when slider value changes
-                processImage(processType: .zoomImage)
+
                 if editing && zoomScale > 1.0 {
-                    processImage(processType: .zoomImage)
+                        //  processImage(processType: .zoomImage)
                         // Slider value is being edited
                     print("Slider value editing started")
                 } else {
@@ -181,6 +169,7 @@ struct EditImageView: View {
                 }
             })
             .padding()
+
             HStack {
                 createCapsuleButton(label: "Revert to Original") {
                     processImage(processType: .originalImage)
@@ -192,20 +181,22 @@ struct EditImageView: View {
                 }
                 .padding(.horizontal, 20)
             }
-            .navigationDestination(isPresented: $isGoingBack) {
-                SavedImagesView(pageTitle: "")
+            Spacer()
+        }
+        .navigationDestination(isPresented: $isGoingBack) {
+            SavedImagesView(pageTitle: "")
                 //TabsView(selectedTab: 1)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        SavedImagesView(pageTitle: "")
-                    } label: {
-                        Text("Saved Images")
-                    }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink {
+                    SavedImagesView(pageTitle: "")
+                } label: {
+                    Text("Saved Images")
                 }
             }
         }
+
         .onAppear {
             if let activeImage = imageLoader.image {
                 self.myUIImage = activeImage
@@ -214,7 +205,8 @@ struct EditImageView: View {
         .navigationTitle("Edit Image")
 
     }
-    private func processImage(processType: ImageProcessings) {
+
+    func processImage(processType: ImageProcessings) {
         if let activeImage = imageLoader.image {
             DispatchQueue.global().async {
                 DispatchQueue.main.async {
@@ -332,6 +324,7 @@ struct EditImageView: View {
                 )
         }
     }
+
 }
 enum ImageProcessings {
     case addFrame(type: Frames)
