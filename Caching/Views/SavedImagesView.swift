@@ -25,7 +25,7 @@ struct SavedImagesView: View {
                                         .resizable()
                                     Button(action: {
                                         viewModel.remove(id: savedImage.id)
-                                    }, label:  {
+                                    }, label: {
                                         Image(systemName: "trash")
                                             .frame(width: 30, height: 30)
                                             .foregroundColor(.red)

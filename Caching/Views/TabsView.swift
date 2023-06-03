@@ -28,4 +28,3 @@ struct TabsView: View {
     .navigationBarBackButtonHidden(true)
     }
 }
-

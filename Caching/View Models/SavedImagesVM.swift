@@ -1,4 +1,4 @@
-    //
+//
     //  SavedImagesVM.swift
     //  Caching
     //
@@ -27,7 +27,7 @@ class SavedImagesVM: ObservableObject {
             let realm = try Realm()
             let results = realm.objects(SavedImageObject.self)
             
-            token = results.observe({ [weak self] changes in
+            token = results.observe({ [weak self] _ in
                 self?.allSaveimages = results.map(SavedImage.init)
                     .sorted(by: { $0.id > $1.id })
             })

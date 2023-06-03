@@ -1,4 +1,4 @@
-    //
+//
     //  SwitchImagesView.swift
     //  Caching
     //
@@ -38,14 +38,9 @@ struct SwitchImagesView: View {
                 }
         )
         .onAppear {
-            for (index, number) in viewModel.enumerated() {
-                if number.id == savedImage.id {
+            for (index, number) in viewModel.enumerated() where number.id == savedImage.id {
                     self.index = index
-                }
             }
-
-
-
         }
     }
     func handleSwipeLeft() {
@@ -57,7 +52,7 @@ struct SwitchImagesView: View {
                 withAnimation {
                     isSwipedLeft = false
                     if index > 0 {
-                        index = index - 1
+                        index -= 1
                     }
                 }
             }
@@ -78,7 +73,7 @@ struct SwitchImagesView: View {
                 withAnimation {
                     isSwipedRight = false
                         // Swiped right
-                    index = index + 1
+                    index += 1
                     print( "right Index: \(index)")
                 }
             }

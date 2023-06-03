@@ -25,20 +25,18 @@ class NetworkManager {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    func fetchSecret(secret: Secrets) -> String{
+    func fetchSecret(secret: Secrets) -> String {
         let fetchedLink = Bundle.main.object(forInfoDictionaryKey: secret.rawValue) as? String
         guard let secretURL = fetchedLink, !(secretURL.isEmpty ) else {
             fatalError("URL is empty")
         }
-        return secret == .BaseURL ? "https://\(secretURL)": secretURL
+        return secret == .baseURL ? "https://\(secretURL)": secretURL
     }
     enum Secrets: String {
-        case BaseURL
-        case ApiKey
+        case baseURL = "BaseURL"
+        case apiKey = "ApiKey"
     }
     enum URLError: Error {
         case wrongURL
     }
 }
-
-
