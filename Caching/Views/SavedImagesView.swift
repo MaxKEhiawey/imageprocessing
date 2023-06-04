@@ -10,6 +10,7 @@ import SwiftUI
 struct SavedImagesView: View {
     @StateObject private var viewModel = SavedImagesVM()
     @State private var gridLayout: [GridItem] = [ GridItem(.flexible()) ]
+    @State var pageTitle: String = "Saved images"
     var body: some View {
         NavigationView {
             ScrollView {
@@ -24,7 +25,7 @@ struct SavedImagesView: View {
                                         .resizable()
                                     Button(action: {
                                         viewModel.remove(id: savedImage.id)
-                                    }, label:  {
+                                    }, label: {
                                         Image(systemName: "trash")
                                             .frame(width: 30, height: 30)
                                             .foregroundColor(.red)
@@ -42,7 +43,7 @@ struct SavedImagesView: View {
                 }
 
             }
-            .navigationBarTitle("Saved Images")
+            .navigationBarTitle(pageTitle)
             .padding(.leading, 4)
             .padding(.trailing, 4)
         }

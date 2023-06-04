@@ -91,6 +91,20 @@ class ImageUtilities: ObservableObject {
 
         return UIGraphicsGetImageFromCurrentImageContext()
     }
+    func zoomImage(image: UIImage, scale: CGFloat) -> UIImage? {
+        let newSize = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        let rect = CGRect(origin: .zero, size: newSize)
+
+        UIGraphicsBeginImageContextWithOptions(newSize, false, image.scale)
+
+        image.draw(in: rect)
+
+        let zoomedImage = UIGraphicsGetImageFromCurrentImageContext()
+
+        UIGraphicsEndImageContext()
+
+        return zoomedImage
+    }
 
     func rotationImage(image: UIImage, rotation: UIImage.Orientation) -> UIImage? {
         guard let cgImage = image.cgImage else {
@@ -101,7 +115,9 @@ class ImageUtilities: ObservableObject {
         let imageRect = CGRect(origin: .zero, size: imageSize)
         let colorSpace = CGColorSpaceCreateDeviceRGB()
 
-        guard let context = CGContext(data: nil, width: Int(imageSize.width), height: Int(imageSize.height), bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+        guard let context = CGContext(data: nil, width: Int(imageSize.width),
+                                      height: Int(imageSize.height), bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+        else {
             return nil
         }
 
@@ -120,15 +136,15 @@ class ImageUtilities: ObservableObject {
         var transform: CGAffineTransform = .identity
 
         switch orientation {
-            case .portrait:
+        case .portrait:
                 transform = CGAffineTransform.identity
-            case .portraitUpsideDown:
+        case .portraitUpsideDown:
                 transform = CGAffineTransform.identity
-            case .landscapeRight:
+        case .landscapeRight:
                 transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-            case .landscapeLeft:
+        case .landscapeLeft:
                 transform = CGAffineTransform.identity
-            default:
+        default:
                 return nil
         }
 

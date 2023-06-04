@@ -16,7 +16,7 @@ class ViewModel: ObservableObject {
     init(dataService: NetworkManager) {
         self.networkManager = dataService
         self.getImages()
-        print(networkManager.fetchSecret(secret: .ApiKey))
+        print(networkManager.fetchSecret(secret: .apiKey))
     }
     
     var cancellables = Set<AnyCancellable>()

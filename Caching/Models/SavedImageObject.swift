@@ -11,12 +11,10 @@ import UIKit
 
 class SavedImageObject: Object, Identifiable {
     @Persisted(primaryKey: true) var id: ObjectId
-    @Persisted var _originalImageData: Data
-    @Persisted var _blurredImageData: Data
-    @Persisted var isShowingOriginal: Bool
+    @Persisted var blurredImageData: Data
 
     var processedImage: UIImage {
-        get { UIImage(data: _blurredImageData) ?? UIImage() }
-        set { _blurredImageData = newValue.pngData() ?? Data() }
+        get { UIImage(data: blurredImageData) ?? UIImage() }
+        set { blurredImageData = newValue.pngData() ?? Data() }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 final class Configurator {
-    private func getSecretItem(isURL: Bool = true, baseURL: _Secrets) -> String{
+    private func getSecretItem(isURL: Bool = true, baseURL: _Secrets) -> String {
         let fetchedLink = Bundle.main.object(forInfoDictionaryKey: baseURL.rawValue ) as? String
         guard let secretURL = fetchedLink, !(secretURL.isEmpty ) else {
             fatalError("URL is empty")
@@ -15,14 +15,13 @@ final class Configurator {
         return isURL ? "https://\(secretURL)": secretURL
     }
     lazy var baseURL: String = {
-        return getSecretItem(baseURL: .BaseURL)
+        return getSecretItem(baseURL: .baseURL)
     }()
     lazy var apikey: String = {
-        return getSecretItem(isURL: false, baseURL: .ApiKey)
+        return getSecretItem(isURL: false, baseURL: .apiKey)
     }()
     enum _Secrets: String {
-        case BaseURL
-        case ApiKey
+        case baseURL = "BaseURL"
+        case apiKey = "ApiKey"
     }
 }
-

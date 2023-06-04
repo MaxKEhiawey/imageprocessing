@@ -1,4 +1,4 @@
-    //
+//
     //  SavedImagesVM.swift
     //  Caching
     //
@@ -27,7 +27,7 @@ class SavedImagesVM: ObservableObject {
             let realm = try Realm()
             let results = realm.objects(SavedImageObject.self)
             
-            token = results.observe({ [weak self] changes in
+            token = results.observe({ [weak self] _ in
                 self?.allSaveimages = results.map(SavedImage.init)
                     .sorted(by: { $0.id > $1.id })
             })
@@ -43,20 +43,6 @@ class SavedImagesVM: ObservableObject {
             if let image = realm.object(ofType: SavedImageObject.self, forPrimaryKey: objectId) {
                 try realm.write {
                     realm.delete(image)
-                }
-            }
-        } catch let error {
-            print(error)
-        }
-    }
-        // Update image toggle
-    func update(id: String, isShowingOriginal: Bool) {
-        do {
-            let realm = try Realm()
-            let objectId = try ObjectId(string: id)
-            if let image = realm.object(ofType: SavedImageObject.self, forPrimaryKey: objectId) {
-                try realm.write {
-                    image.isShowingOriginal = isShowingOriginal
                 }
             }
         } catch let error {

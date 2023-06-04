@@ -12,7 +12,6 @@ struct SavedImage: Identifiable {
     var id: String
     var processedImage: UIImage
 
-
     init(imageObject: SavedImageObject) {
         self.id = imageObject.id.stringValue
         self.processedImage = imageObject.processedImage

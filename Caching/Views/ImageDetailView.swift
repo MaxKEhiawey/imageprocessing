@@ -1,4 +1,4 @@
-    //
+//
     //  ImageDetailView.swift
     //  Caching
     //
@@ -11,7 +11,7 @@ import UIKit
 struct ImageDetailView: View {
     @State private var index = 0
     @State private var changedImage = ""
-    @State private var image: UIImage? = nil
+    @State private var image: UIImage?
     var imageList: [UnsplashImage]
     @State var key: String
     
@@ -55,7 +55,7 @@ struct ImageDetailView: View {
             Spacer()
             
         }
-        .onAppear{
+        .onAppear {
             DispatchQueue.main.async {
                 setImageIndex()
             }
@@ -70,14 +70,12 @@ struct ImageDetailView: View {
             }
         }
     }
-    func setImageIndex(){
+    func setImageIndex() {
         DispatchQueue.main.async {
-            for (index, image) in imageList.enumerated() {
-                if image.id == key {
+            for (index, image) in imageList.enumerated() where image.id == key {
                     self.index = index
                     changedImage = imageList[index].urls.regular
                     updateImage()
-                }
             }
         }
     }
@@ -86,8 +84,7 @@ struct ImageDetailView: View {
         guard let imageURL = URL(string: changedImage) else {
             return
         }
-        URLSession.shared.dataTask(with: imageURL) {
-            data, response, error in
+        URLSession.shared.dataTask(with: imageURL) { data, _, error in
             guard let data = data, error == nil else {
                 return
             }
@@ -98,21 +95,19 @@ struct ImageDetailView: View {
     }
     func changeindex(value: Int) {
         DispatchQueue.main.async {
-            if value < 0 && index > 0  {
+            if value < 0 && index > 0 {
                 
-                index = index + value
+                index += value
                 print("Index:", index)
                 changedImage = imageList[index].urls.regular
                 self.key = imageList[index].id
                 updateImage()
-                
-            } else if value > 0 && index < imageList.count - 1  {
-                index = index + value
+                } else if value > 0 && index < imageList.count - 1 {
+                index += value
                 print("Index:", index)
                 changedImage = imageList[index].urls.regular
                 self.key = imageList[index].id
                 updateImage()
-                
             }
         }
     }
