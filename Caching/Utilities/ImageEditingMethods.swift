@@ -1,9 +1,9 @@
 //
-    //  ImageEditingMethods.swift
-    //  Caching
-    //
-    //  Created by AMALITECH MACBOOK on 03/06/2023.
-    //
+//  ImageEditingMethods.swift
+//  Caching
+//
+//  Created by AMALITECH MACBOOK on 03/06/2023.
+//
 
 import Foundation
 import CoreImage
@@ -19,23 +19,23 @@ class ImageEditingMethods: ObservableObject {
     private func selectOrientation(_ orientation: UIImage.Orientation, _ image: UIImage) {
         switch orientation {
         case .left:
-            if let transformedImage = imgUtility.rotationImage(image: image, rotation: .left) {
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .left) {
                     myUIImage = transformedImage
                 }
         case .up:
-            if let transformedImage = imgUtility.rotationImage(image: image, rotation: .up) {
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .up) {
                     myUIImage = transformedImage
                 }
         case .down:
-            if let transformedImage = imgUtility.rotationImage(image: image, rotation: .down) {
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .down) {
                     myUIImage = transformedImage
                 }
         case .right:
-            if let transformedImage = imgUtility.rotationImage(image: image, rotation: .right) {
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .right) {
                     myUIImage = transformedImage
                 }
         case .upMirrored:
-            if let transformedImage = imgUtility.rotationImage(image: image, rotation: .upMirrored) {
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .upMirrored) {
                     myUIImage = transformedImage
                 }
         case .downMirrored:
@@ -43,11 +43,11 @@ class ImageEditingMethods: ObservableObject {
                     myUIImage = transformedImage
                 }
         case .leftMirrored:
-            if let transformedImage = imgUtility.rotationImage(image: image, rotation: .leftMirrored) {
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .leftMirrored) {
                     myUIImage = transformedImage
                 }
         case .rightMirrored:
-            if let transformedImage = imgUtility.rotationImage(image: image, rotation: .rightMirrored) {
+                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .rightMirrored) {
                     myUIImage = transformedImage
                 }
         @unknown default:
@@ -64,7 +64,7 @@ class ImageEditingMethods: ObservableObject {
                     case .addFrame(type: let type):
                             selectFrame(type)
                     case .blurImage:
-                        if let imageBlur = imgUtility.applyBlurToImage(activeImage, withRadius: 10.0) {
+                            if let imageBlur = imgUtility.applyBlurToImage(activeImage, withRadius: 10.0) {
                                 myUIImage = imageBlur
                             }
                     case .orientation(orientation: let orientation):
@@ -76,7 +76,7 @@ class ImageEditingMethods: ObservableObject {
                                 myUIImage = zoomedImage
                             }
                     case .saveImage:
-                           var savedImagesViewModel = SavedImagesVM()
+                            let savedImagesViewModel = SavedImagesVM()
                             savedImagesViewModel.saveImage(processedImage: myUIImage)
                     }
                 }

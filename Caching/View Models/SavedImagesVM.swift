@@ -49,20 +49,6 @@ class SavedImagesVM: ObservableObject {
             print(error)
         }
     }
-        // Update image toggle
-    func update(id: String, isShowingOriginal: Bool) {
-        do {
-            let realm = try Realm()
-            let objectId = try ObjectId(string: id)
-            if let image = realm.object(ofType: SavedImageObject.self, forPrimaryKey: objectId) {
-                try realm.write {
-                    image.isShowingOriginal = isShowingOriginal
-                }
-            }
-        } catch let error {
-            print(error)
-        }
-    }
 
         // Update image toggle
     func saveImage(processedImage: UIImage) {

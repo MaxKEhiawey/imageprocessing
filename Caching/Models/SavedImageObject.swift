@@ -11,9 +11,7 @@ import UIKit
 
 class SavedImageObject: Object, Identifiable {
     @Persisted(primaryKey: true) var id: ObjectId
-    @Persisted var originalImageData: Data
     @Persisted var blurredImageData: Data
-    @Persisted var isShowingOriginal: Bool
 
     var processedImage: UIImage {
         get { UIImage(data: blurredImageData) ?? UIImage() }
