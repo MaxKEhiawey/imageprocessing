@@ -12,7 +12,8 @@ import UIKit
 class ImageEditingMethods: ObservableObject {
     private var imgUtility = ImageUtilities()
     @Published var savedImagesViewModel = SavedImagesVM()
-    @Published var zoomScale: CGFloat = 0.01
+    @Published var zoomScale: CGFloat = 0.0101
+    @Published var blurRadius = 0.0
     @Published var myUIImage: UIImage = UIImage(systemName: "photo")!
 
         // change orientation
@@ -64,12 +65,14 @@ class ImageEditingMethods: ObservableObject {
                     case .addFrame(type: let type):
                             selectFrame(type)
                     case .blurImage:
-                            if let imageBlur = imgUtility.applyBlurToImage(activeImage, withRadius: 10.0) {
+                            if let imageBlur = imgUtility.applyBlurToImage(activeImage, withRadius: blurRadius) {
                                 myUIImage = imageBlur
                             }
                     case .orientation(orientation: let orientation):
                             selectOrientation(orientation, myUIImage)
                     case .originalImage:
+                            zoomScale=0.0101
+                            blurRadius=1.0
                             myUIImage = activeImage
                     case .zoomImage:
                             if let zoomedImage = imgUtility.applyZoomEffect(image: activeImage, zoomScale: zoomScale) {

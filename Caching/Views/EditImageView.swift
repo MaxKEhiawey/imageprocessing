@@ -25,8 +25,12 @@ struct EditImageView: View {
             Spacer()
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
-
-                    createCapsuleButton(label: "Blur image") {
+                    createCapsuleButton(label: "Blur image -") {
+                        processMethod.blurRadius-=1.0
+                        processMethod.processImage(processType: .blurImage, originalImage: imageLoader.image)
+                    }
+                    createCapsuleButton(label: "Blur image +") {
+                        processMethod.blurRadius+=1.0
                         processMethod.processImage(processType: .blurImage, originalImage: imageLoader.image)
                     }
 
@@ -50,12 +54,6 @@ struct EditImageView: View {
                         createCapsuleButton(label: "Portrait") {
                             processMethod.processImage(processType: .orientation(orientation: .up), originalImage: imageLoader.image)
                         }
-                        createCapsuleButton(label: "90'Left") {
-                            processMethod.processImage(processType: .orientation(orientation: .left), originalImage: imageLoader.image)
-                        }
-                        createCapsuleButton(label: "90' Right") {
-                            processMethod.processImage(processType: .orientation(orientation: .right), originalImage: imageLoader.image)
-                        }
                         createCapsuleButton(label: "Portrait Mirrored") {
                             processMethod.processImage(processType: .orientation(orientation: .upMirrored), originalImage: imageLoader.image)
                         }
@@ -73,15 +71,17 @@ struct EditImageView: View {
                     })
 
                     createCapsuleButton(label: "Zoom image -") {
-                       // guard zoomScale > 0 else {return}
-                        processMethod.zoomScale -= 0.05
+                     guard processMethod.zoomScale > 0.0101 else {return}
+                        processMethod.zoomScale -= 0.01
                         processMethod.processImage(processType: .zoomImage, originalImage: imageLoader.image)
+                        print("zoomscale is:", processMethod.zoomScale)
                     }
 
                     createCapsuleButton(label: "Zoom image +") {
                        // guard zoomScale > 0 else {return}
-                        processMethod.zoomScale += 0.05
+                        processMethod.zoomScale += 0.01
                         processMethod.processImage(processType: .zoomImage, originalImage: imageLoader.image)
+                        print("zoomscale is:", processMethod.zoomScale)
                     }
                 }
             }
@@ -92,18 +92,19 @@ struct EditImageView: View {
                 .frame(height: 400)
                 .padding()
 
-            Slider(value: $processMethod.zoomScale, in: 0.1...5.0, step: 0.05, onEditingChanged: { editing in
-                    // Perform action when slider value changes
-                if editing &&  processMethod.zoomScale > 1.0 {
-                        //  processImage(processType: .zoomImage)
-                        // Slider value is being edited
-                    print("Slider value editing started")
-                } else {
-                        // Slider value editing finished
-                    print("Slider value editing finished")
-                }
-            })
-            .padding()
+//            Slider(value: $processMethod.zoomScale, in: -3.0...3.0, step: 0.05, onEditingChanged: { editing in
+//                    // Perform action when slider value changes
+//                processMethod.processImage(processType: .zoomImage, originalImage: imageLoader.image)
+//                if editing &&  processMethod.zoomScale > 1.0 {
+//                        //  processImage(processType: .zoomImage)
+//                        // Slider value is being edited
+//                    print("Slider value editing started")
+//                } else {
+//                        // Slider value editing finished
+//                    print("Slider value editing finished")
+//                }
+//            })
+//            .padding()
 
             HStack {
                 createCapsuleButton(label: "Revert to Original") {
