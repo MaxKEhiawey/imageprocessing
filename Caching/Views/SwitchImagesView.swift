@@ -72,9 +72,7 @@ struct SwitchImagesView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation {
                     isSwipedRight = false
-                        // Swiped right
                     index += 1
-                    print( "right Index: \(index)")
                 }
             }
         }

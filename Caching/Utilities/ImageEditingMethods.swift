@@ -94,7 +94,6 @@ class ImageEditingMethods: ObservableObject {
         if let dimensions = getImageDimensions(image: myUIImage) {
             width = dimensions.width
             height = dimensions.height
-            print("Image dimensions: \(width) x \(height)")
         } else {
             print("Failed to retrieve image dimensions")
         }

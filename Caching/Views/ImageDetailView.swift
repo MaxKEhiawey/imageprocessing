@@ -98,13 +98,11 @@ struct ImageDetailView: View {
             if value < 0 && index > 0 {
                 
                 index += value
-                print("Index:", index)
                 changedImage = imageList[index].urls.regular
                 self.key = imageList[index].id
                 updateImage()
                 } else if value > 0 && index < imageList.count - 1 {
                 index += value
-                print("Index:", index)
                 changedImage = imageList[index].urls.regular
                 self.key = imageList[index].id
                 updateImage()
