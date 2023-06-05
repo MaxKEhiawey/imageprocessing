@@ -30,7 +30,6 @@ class ImageLoaderVM: ObservableObject {
             isLoading = false
         } else {
             downloadImages()
-            print("downloading image..")
         }
     }
     
