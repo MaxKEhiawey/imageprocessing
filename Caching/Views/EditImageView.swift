@@ -55,19 +55,14 @@ struct EditImageView: View {
                         //: orientation
                         Menu(content: {
                             createCapsuleButton(label: "Portrait") {
-                                processMethod.processImage(processType: .orientation(orientation: .up), originalImage: imageLoader.image)
+                                processMethod.processImage(processType: .orientation(isLeftLandscape: false, isPortrait: true), originalImage: imageLoader.image)
                             }
-                            createCapsuleButton(label: "Portrait Mirrored") {
-                                processMethod.processImage(processType: .orientation(orientation: .upMirrored), originalImage: imageLoader.image)
-                            }
-                            createCapsuleButton(label: "Portrait Capside") {
-                                processMethod.processImage(processType: .orientation(orientation: .downMirrored), originalImage: imageLoader.image)
+
+                            createCapsuleButton(label: "Right Landscape") {
+                                processMethod.processImage(processType: .orientation(isLeftLandscape: false, isPortrait: false), originalImage: imageLoader.image)
                             }
                             createCapsuleButton(label: "Left Landscape") {
-                                processMethod.processImage(processType: .orientation(orientation: .leftMirrored), originalImage: imageLoader.image)
-                            }
-                            createCapsuleButton(label: "Right Landscape") {
-                                processMethod.processImage(processType: .orientation(orientation: .rightMirrored), originalImage: imageLoader.image)
+                                processMethod.processImage(processType: .orientation(isLeftLandscape: true, isPortrait: false), originalImage: imageLoader.image)
                             }
                         }, label: {
                             createCapsuleButton(label: "Select Orient") {}

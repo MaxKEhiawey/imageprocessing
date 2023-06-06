@@ -14,48 +14,9 @@ class ImageEditingMethods: ObservableObject {
     @Published var savedImagesViewModel = SavedImagesVM()
     @Published var zoomScale: CGFloat = 0.0101
     @Published var blurRadius = 0.0
+    @Published var isPortrait = false
     @Published var myUIImage: UIImage = UIImage(systemName: "photo")!
 
-        // change orientation
-    private func selectOrientation(_ orientation: UIImage.Orientation, _ image: UIImage) {
-        switch orientation {
-        case .left:
-                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .left) {
-                    myUIImage = transformedImage
-                }
-        case .up:
-                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .up) {
-                    myUIImage = transformedImage
-                }
-        case .down:
-                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .down) {
-                    myUIImage = transformedImage
-                }
-        case .right:
-                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .right) {
-                    myUIImage = transformedImage
-                }
-        case .upMirrored:
-                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .upMirrored) {
-                    myUIImage = transformedImage
-                }
-        case .downMirrored:
-                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .downMirrored) {
-                    myUIImage = transformedImage
-                }
-        case .leftMirrored:
-                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .leftMirrored) {
-                    myUIImage = transformedImage
-                }
-        case .rightMirrored:
-                if let transformedImage = imgUtility.rotationImage(image: image, rotation: .rightMirrored) {
-                    myUIImage = transformedImage
-                }
-        @unknown default:
-                print("Unknown move")
-        }
-
-    }
         // different image processing function
     func processImage(processType: ImageProcessings, originalImage: UIImage?) {
         if let activeImage = originalImage {
@@ -68,14 +29,21 @@ class ImageEditingMethods: ObservableObject {
                             if let imageBlur = imgUtility.applyBlurToImage(activeImage, withRadius: blurRadius) {
                                 myUIImage = imageBlur
                             }
-                    case .orientation(orientation: let orientation):
-                            selectOrientation(orientation, myUIImage)
+                    case .orientation(isLeftLandscape: let isLeftLandscape, isPortrait: let isPortrait):
+                            if isPortrait {
+                                myUIImage = activeImage
+                            } else {
+                                if let changedImage = imgUtility.changeImageOrientation(activeImage, isPortrait: isLeftLandscape) {
+                                    myUIImage = changedImage
+                                }
+                            }
+                            // selectOrientation(orientation, myUIImage)
                     case .originalImage:
                             zoomScale=0.0101
                             blurRadius=1.0
                             myUIImage = activeImage
                     case .zoomImage:
-                            if let zoomedImage = imgUtility.applyZoomEffect(image: activeImage, zoomScale: zoomScale) {
+                            if let zoomedImage = imgUtility.zoomImage(activeImage, zoomFactor: zoomScale) {
                                 myUIImage = zoomedImage
                             }
                     case .saveImage:
@@ -130,7 +98,7 @@ class ImageEditingMethods: ObservableObject {
 enum ImageProcessings {
     case addFrame(type: Frames)
     case blurImage
-    case orientation(orientation: UIImage.Orientation)
+    case orientation(isLeftLandscape: Bool, isPortrait: Bool)
     case originalImage
     case zoomImage
     case saveImage
