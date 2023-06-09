@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct UnsplashImage: Decodable, Identifiable {
+struct UnsplashImage: Decodable, Identifiable, Equatable  {
     let id: String
     let urls: UnsplashImageUrls
 }
 
-struct UnsplashImageUrls: Decodable {
-    let raw: String
-    let full: String
-    let regular: String
-    let small: String
-    let thumb: String
+struct UnsplashImageUrls: Decodable, Equatable  {
+    var raw: String
+    var full: String
+    var regular: String
+    var small: String
+    var thumb: String
 }

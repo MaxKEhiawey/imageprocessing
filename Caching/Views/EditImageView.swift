@@ -9,16 +9,10 @@ import SwiftUI
 import CoreImage
 
 struct EditImageView: View {
-
-    @StateObject var imageLoader: ImageLoaderVM
-    @State var isGoingBack: Bool = false
+    @State var isSaved: Bool = false
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var processMethod = ImageEditingMethods()
-    @StateObject var savedImagesViewModel = SavedImagesVM()
+    @ObservedObject  var viewModel: SavedImagesVM
     @State private var play: Bool = false
-    init(imageUrl: String, key: String) {
-        _imageLoader = StateObject(wrappedValue: ImageLoaderVM(url: URL(string: imageUrl)!, key: key))
-    }
 
     var body: some View {
         ZStack {
@@ -28,83 +22,85 @@ struct EditImageView: View {
                     HStack(spacing: 16) {
                 
                         createCapsuleButton(label: "Blur image -") {
-                            processMethod.blurRadius-=1.0
-                            processMethod.processImage(processType: .blurImage, originalImage: imageLoader.image)
+                            viewModel.blurRadius-=1.0
+                            viewModel.processImage(processType: .blurImage)
                         }
                         createCapsuleButton(label: "Blur image +") {
-                            processMethod.blurRadius+=1.0
-                            processMethod.processImage(processType: .blurImage, originalImage: imageLoader.image)
+                            viewModel.blurRadius+=1.0
+                            viewModel.processImage(processType: .blurImage)
                         }
 
                         //: Frames
                         Menu(content: {
                             createCapsuleButton(label: "BlackFrame") {
-                                processMethod.processImage(processType: .addFrame(type: .blackFrame), originalImage: imageLoader.image)
+                                DispatchQueue.main.async {
+                                    viewModel.processImage(processType: .addFrame(type: .blackFrame))
+
+                                }
                             }
                             createCapsuleButton(label: "DarkWoodFrame") {
-                                processMethod.processImage(processType: .addFrame(type: .darkWood), originalImage: imageLoader.image)
+                                viewModel.processImage(processType: .addFrame(type: .darkWood))
                             }
                             createCapsuleButton(label: "GoldFrame") {
-                                processMethod.processImage(processType: .addFrame(type: .goldFrame), originalImage: imageLoader.image)
+                                viewModel.processImage(processType: .addFrame(type: .goldFrame))
                             }
                             createCapsuleButton(label: "LightWoodFrame") {
-                                processMethod.processImage(processType: .addFrame(type: .lightWood), originalImage: imageLoader.image)
+                                viewModel.processImage(processType: .addFrame(type: .lightWood))
                             }}, label: {
                                 createCapsuleButton(label: "Select a frame") {}
                             })
                         //: orientation
                         Menu(content: {
                             createCapsuleButton(label: "Portrait") {
-                                processMethod.processImage(processType: .orientation(isLeftLandscape: false, isPortrait: true), originalImage: imageLoader.image)
+                                viewModel.processImage(processType: .orientation(isLeftLandscape: false, isPortrait: true))
                             }
 
                             createCapsuleButton(label: "Right Landscape") {
-                                processMethod.processImage(processType: .orientation(isLeftLandscape: false, isPortrait: false), originalImage: imageLoader.image)
+                                viewModel.processImage(processType: .orientation(isLeftLandscape: false, isPortrait: false))
                             }
                             createCapsuleButton(label: "Left Landscape") {
-                                processMethod.processImage(processType: .orientation(isLeftLandscape: true, isPortrait: false), originalImage: imageLoader.image)
+                                viewModel.processImage(processType: .orientation(isLeftLandscape: true, isPortrait: false))
                             }
                         }, label: {
                             createCapsuleButton(label: "Select Orient") {}
                         })
 
                         createCapsuleButton(label: "Zoom image -") {
-                            guard processMethod.zoomScale > 0.01501 else {return}
-                            processMethod.zoomScale -= 0.01
-                            processMethod.processImage(processType: .zoomImage, originalImage: imageLoader.image)
+                            guard   viewModel.zoomScale > 0.01501 else {return}
+                            viewModel.zoomScale -= 0.01
+                            viewModel.processImage(processType: .zoomImage)
                         }
 
                         createCapsuleButton(label: "Zoom image +") {
-                            processMethod.zoomScale += 0.01
-                            processMethod.processImage(processType: .zoomImage, originalImage: imageLoader.image)
+                            viewModel.zoomScale += 0.01
+                            viewModel.processImage(processType: .zoomImage)
                         }
                     }
                 }
                 .padding()
                 //: Image in View
-                Image(uiImage: processMethod.myUIImage)
+                Image(uiImage: viewModel.myUIImage)
                     .resizable()
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
                     .frame(height: 400)
                     .padding()
                 //: Button to revert to original image
                 HStack {
                     createCapsuleButton(label: "Revert to Original") {
-                        processMethod.processImage(processType: .originalImage, originalImage: imageLoader.image)
+                        viewModel.processImage(processType: .originalImage)
                     }
                 //: Button to save
                     createCapsuleButton(label: "Save Image") {
-                     processMethod.processImage(processType: .saveImage, originalImage: imageLoader.image)
+                        viewModel.processImage(processType: .saveImage)
                         play = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                              isGoingBack = true
+                              isSaved = true
                         }
                     }
                     .padding(.horizontal, 20)
                 }
                 Spacer()
             }
-            .navigationDestination(isPresented: $isGoingBack) {
+            .navigationDestination(isPresented: $isSaved) {
                 SavedImagesView(pageTitle: "")
             }
             .toolbar {
@@ -117,8 +113,10 @@ struct EditImageView: View {
                 }
             }
             .onAppear {
-                if let activeImage = imageLoader.image {
-                    processMethod.myUIImage = activeImage
+                viewModel.setImageIndex()
+                if let activeImage = viewModel.imageDisplayed {
+                    viewModel.myUIImage = activeImage
+                    viewModel.originalImage = activeImage
                 }
             }
             .navigationTitle("Edit Image")

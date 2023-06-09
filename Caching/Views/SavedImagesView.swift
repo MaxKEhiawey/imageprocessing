@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SavedImagesView: View {
     @StateObject private var viewModel = SavedImagesVM()
+    @ObservedObject  var apiViewModel = ImageViewModel(dataService: NetworkManager())
     @State private var gridLayout: [GridItem] = [ GridItem(.flexible()) ]
     @State var pageTitle: String = "Saved images"
     var body: some View {
@@ -18,11 +19,10 @@ struct SavedImagesView: View {
                     ForEach(viewModel.allSaveimages, id: \.id) { savedImage in
                         VStack {
                             NavigationLink {
-                                SwitchImagesView(viewModel: viewModel.allSaveimages, savedImage: savedImage)
+                                SwitchImagesView(viewModel: viewModel, isDateIndex: true, imageIndex: viewModel.allSaveimages.firstIndex(of: savedImage) ?? 0)
                             } label: {
                                 ZStack(alignment: .topTrailing) {
-                                    Image(uiImage: savedImage.processedImage)
-                                        .resizable()
+                                    ImageView(url: savedImage.url)
                                     Button(action: {
                                         viewModel.remove(id: savedImage.id)
                                     }, label: {
@@ -37,12 +37,26 @@ struct SavedImagesView: View {
                                 }
                             }
                         }
+                        .onAppear {
+                            print("saved ImagesCount:", viewModel.allSaveimages.count)
+
+                            }
                         .frame(height: 200)
                         .padding(.all, 4)
                     }
                 }
 
             }
+
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Fire") {
+                            apiViewModel.getImages(addImages: true)
+                            print("saved ImagesCount:", viewModel.allSaveimages.count)
+                    }
+                }
+            }
+        
             .navigationBarTitle(pageTitle)
             .padding(.leading, 4)
             .padding(.trailing, 4)

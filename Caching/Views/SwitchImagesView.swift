@@ -8,71 +8,36 @@
 import SwiftUI
 
 struct SwitchImagesView: View {
-    var viewModel: [SavedImage]
-    @State private var isSwipedLeft = false
-    @State private var isSwipedRight = false
-    @State var isOriginalImage: Bool = true
-    @State private var selectedSegment = 0
-    @State private var index = 0
-    let savedImage: SavedImage
+    @ObservedObject var viewModel: SavedImagesVM
+    @ObservedObject  var apiViewModel = ImageViewModel(dataService: NetworkManager())
+    @State var isDateIndex: Bool
+    @State var imageIndex: Int = 0
     var body: some View {
         VStack {
             Spacer()
-            Image(uiImage: viewModel[index].processedImage)
-                .resizable()
-                .clipShape(RoundedRectangle(cornerRadius: 15))
-                .frame(height: 400)
-                .padding()
+            PagerView(pageCount: viewModel.allSaveimages.count, currentIndex: $viewModel.imageIndex) {
+                ForEach((0..<viewModel.allSaveimages.count), id: \.self) { index in
+
+                        ImageView(url: viewModel.allSaveimages[index].url)
+                }
+            }
             Spacer()
         }
-        .offset(x: isSwipedLeft ? 20 : isSwipedRight ? -20 : 0)
-        .gesture(
-            DragGesture()
-                .onEnded { gesture in
-                    if gesture.translation.width < 0 {
-
-                        handleSwipeRight()
-                    } else if gesture.translation.width > 0 {
-                        handleSwipeLeft()
-                    }
-                }
-        )
         .onAppear {
-            for (index, number) in viewModel.enumerated() where number.id == savedImage.id {
-                    self.index = index
-            }
-        }
-    }
-    func handleSwipeLeft() {
-        if index > 0 {
-            withAnimation {
-                isSwipedLeft = true
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                withAnimation {
-                    isSwipedLeft = false
-                    if index > 0 {
-                        index -= 1
-                    }
+            DispatchQueue.main.async {
+              if isDateIndex {
+                    viewModel.imageIndex = imageIndex
                 }
-            }
-        }
-    }
-    func handleSwipeRight() {
-            // Swiped right
-        let limit = viewModel.count-1
-        if index < limit {
-            withAnimation {
-                isSwipedRight = true
-            }
-                // Perform other actions for swipe right
-            print("Swiped right")
 
-                // Reset state after animation
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                withAnimation {
-                    isSwipedRight = false
-                    index += 1
+            }
+            print("allImages count:", viewModel.allSaveimages.count, imageIndex)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink {
+                    EditImageView(viewModel: viewModel)
+                } label: {
+                    Text("Edit")
                 }
             }
         }

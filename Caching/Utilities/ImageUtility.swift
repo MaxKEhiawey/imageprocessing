@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import CoreImage
 
-class ImageUtilities: ObservableObject {
+class ImageUtility {
     var images: [UIImage] = []
 
     func applyMotionBlur(to image: UIImage, blurRadius: CGFloat, angle: CGFloat) -> UIImage {
@@ -79,7 +79,6 @@ class ImageUtilities: ObservableObject {
 
         return mergedImage
     }
-
 
     func zoomImage(_ image: UIImage, zoomFactor: CGFloat) -> UIImage? {
         guard let ciImage = CIImage(image: image),
