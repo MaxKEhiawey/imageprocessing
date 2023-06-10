@@ -9,43 +9,42 @@ import SwiftUI
 
 struct SavedImagesView: View {
     @StateObject private var viewModel = SavedImagesVM()
+    @ObservedObject  var apiViewModel = ImageViewModel(dataService: NetworkManager())
     @State private var gridLayout: [GridItem] = [ GridItem(.flexible()) ]
     @State var pageTitle: String = "Saved images"
+    let customButton = CustomButton()
     var body: some View {
-        NavigationView {
+
             ScrollView {
                 LazyVGrid(columns: Array(repeating: .init(.flexible()), count: gridLayout.count % 3 + 1), alignment: .center, spacing: 10) {
                     ForEach(viewModel.allSaveimages, id: \.id) { savedImage in
-                        VStack {
+                       // VStack {
                             NavigationLink {
-                                SwitchImagesView(viewModel: viewModel.allSaveimages, savedImage: savedImage)
+                                SwitchImagesView(viewModel: viewModel, isDateIndex: true, imageIndex: viewModel.allSaveimages.firstIndex(of: savedImage) ?? 0)
                             } label: {
                                 ZStack(alignment: .topTrailing) {
-                                    Image(uiImage: savedImage.processedImage)
-                                        .resizable()
-                                    Button(action: {
+                                    ImageView(url: savedImage.url)
+                                    customButton.deleteButton {
                                         viewModel.remove(id: savedImage.id)
-                                    }, label: {
-                                        Image(systemName: "trash")
-                                            .frame(width: 30, height: 30)
-                                            .foregroundColor(.red)
-                                            .background(Color.gray)
-                                            .cornerRadius(20)
-                                            .padding(.top, 8)
-                                            .padding(.trailing, 8)
-                                    })
+                                    }
                                 }
                             }
-                        }
-                        .frame(height: 200)
-                        .padding(.all, 4)
                     }
                 }
 
             }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Fire") {
+                            apiViewModel.getImages(addImages: true)
+                            print("saved ImagesCount:", viewModel.allSaveimages.count)
+                    }
+                }
+            }
+        
             .navigationBarTitle(pageTitle)
+            .navigationBarTitleDisplayMode(.inline)
             .padding(.leading, 4)
             .padding(.trailing, 4)
         }
     }
-}

@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct ImageListView: View {
-    static let dataservice = NetworkManager()
-
     var body: some View {
-        ImageGridView(dataService: ImageListView.dataservice)
+        ImageGridView(viewModel: ImageViewModel(dataService: NetworkManager()))
     }
 }
