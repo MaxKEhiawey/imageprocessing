@@ -25,8 +25,7 @@ struct ImageGridView: View {
                     ScrollView {
                         LazyVGrid(columns: Array(repeating: .init(.flexible()), count: gridLayout.count % 3 + 1), alignment: .center, spacing: 10) {
                             ForEach((0..<viewModel.images.count), id: \.self) { index in
-
-                                NavigationLink(destination: ImageDetailView(viewModel: viewModel, key: viewModel.images[index].id)) {
+                                NavigationLink(destination: Text("")) {
                                     ImageView(url: viewModel.images[index].urls.thumb)
                         }
                     }

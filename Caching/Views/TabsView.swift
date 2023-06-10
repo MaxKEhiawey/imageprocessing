@@ -11,7 +11,7 @@ struct TabsView: View {
     @State  var selectedTab = 0
     var body: some View {
         TabView(selection: $selectedTab) {
-          SavedImagesView()
+            SavedImagesView()
             .tabItem {
                 Image(systemName: "house")
                 Text("Home")

@@ -1,4 +1,4 @@
-    //
+//
     //  SavedImages.swift
     //  Caching
     //
@@ -14,5 +14,14 @@ struct SavedImage: Identifiable, Equatable {
     init(imageObject: SavedImageObject) {
         self.id = imageObject.id.stringValue
         self.url = imageObject.url
+    }
+}
+
+struct ProcessedImage: Identifiable, Equatable {
+    var id: String
+    var processedImage: UIImage
+    init(imageObject: ProcessedImageObject) {
+        self.id = imageObject.id.stringValue
+        self.processedImage = imageObject.processedImage
     }
 }

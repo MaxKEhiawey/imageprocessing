@@ -15,6 +15,7 @@ import SwiftUI
                 if let imageDisplay {
                     Image(uiImage: imageDisplay)
                         .resizable()
+                        .frame(height: 240)
                 } else {
                     ProgressView()
                 }
@@ -23,7 +24,6 @@ import SwiftUI
             .onAppear {
                 updateImage()
             }
-            .frame(height: 300)
             .padding(.all, 4)
         }
         private func updateImage() {

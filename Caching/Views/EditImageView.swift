@@ -13,7 +13,7 @@ struct EditImageView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject  var viewModel: SavedImagesVM
     @State private var play: Bool = false
-
+    let customButton = CustomButton()
     var body: some View {
         ZStack {
             VStack {
@@ -21,57 +21,57 @@ struct EditImageView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                 
-                        createCapsuleButton(label: "Blur image -") {
+                        customButton.capsuleButton(label: "Blur image -") {
                             viewModel.blurRadius-=1.0
                             viewModel.processImage(processType: .blurImage)
                         }
-                        createCapsuleButton(label: "Blur image +") {
+                        customButton.capsuleButton(label: "Blur image +") {
                             viewModel.blurRadius+=1.0
                             viewModel.processImage(processType: .blurImage)
                         }
 
                         //: Frames
                         Menu(content: {
-                            createCapsuleButton(label: "BlackFrame") {
+                            customButton.capsuleButton(label: "BlackFrame") {
                                 DispatchQueue.main.async {
                                     viewModel.processImage(processType: .addFrame(type: .blackFrame))
 
                                 }
                             }
-                            createCapsuleButton(label: "DarkWoodFrame") {
+                            customButton.capsuleButton(label: "DarkWoodFrame") {
                                 viewModel.processImage(processType: .addFrame(type: .darkWood))
                             }
-                            createCapsuleButton(label: "GoldFrame") {
+                            customButton.capsuleButton(label: "GoldFrame") {
                                 viewModel.processImage(processType: .addFrame(type: .goldFrame))
                             }
-                            createCapsuleButton(label: "LightWoodFrame") {
+                            customButton.capsuleButton(label: "LightWoodFrame") {
                                 viewModel.processImage(processType: .addFrame(type: .lightWood))
                             }}, label: {
-                                createCapsuleButton(label: "Select a frame") {}
+                                customButton.capsuleButton(label: "Select a frame") {}
                             })
                         //: orientation
                         Menu(content: {
-                            createCapsuleButton(label: "Portrait") {
+                            customButton.capsuleButton(label: "Portrait") {
                                 viewModel.processImage(processType: .orientation(isLeftLandscape: false, isPortrait: true))
                             }
 
-                            createCapsuleButton(label: "Right Landscape") {
+                            customButton.capsuleButton(label: "Right Landscape") {
                                 viewModel.processImage(processType: .orientation(isLeftLandscape: false, isPortrait: false))
                             }
-                            createCapsuleButton(label: "Left Landscape") {
+                            customButton.capsuleButton(label: "Left Landscape") {
                                 viewModel.processImage(processType: .orientation(isLeftLandscape: true, isPortrait: false))
                             }
                         }, label: {
-                            createCapsuleButton(label: "Select Orient") {}
+                            customButton.capsuleButton(label: "Select Orient") {}
                         })
 
-                        createCapsuleButton(label: "Zoom image -") {
+                        customButton.capsuleButton(label: "Zoom image -") {
                             guard   viewModel.zoomScale > 0.01501 else {return}
                             viewModel.zoomScale -= 0.01
                             viewModel.processImage(processType: .zoomImage)
                         }
 
-                        createCapsuleButton(label: "Zoom image +") {
+                        customButton.capsuleButton(label: "Zoom image +") {
                             viewModel.zoomScale += 0.01
                             viewModel.processImage(processType: .zoomImage)
                         }
@@ -85,11 +85,11 @@ struct EditImageView: View {
                     .padding()
                 //: Button to revert to original image
                 HStack {
-                    createCapsuleButton(label: "Revert to Original") {
+                    customButton.capsuleButton(label: "Revert to Original") {
                         viewModel.processImage(processType: .originalImage)
                     }
                 //: Button to save
-                    createCapsuleButton(label: "Save Image") {
+                    customButton.capsuleButton(label: "Save Image") {
                         viewModel.processImage(processType: .saveImage)
                         play = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -101,12 +101,12 @@ struct EditImageView: View {
                 Spacer()
             }
             .navigationDestination(isPresented: $isSaved) {
-                SavedImagesView(pageTitle: "")
+                ProcessedImageView()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        SavedImagesView(pageTitle: "")
+                        ProcessedImageView()
                     } label: {
                         Text("Saved Images")
                     }
@@ -135,18 +135,4 @@ struct EditImageView: View {
             .allowsHitTesting(false)
         }.ignoresSafeArea()
     }
-// custom button
-    func createCapsuleButton(label: String, action: @escaping () -> Void) -> some View {
-        return Button(action: action) {
-            Text(label)
-                .frame(height: 10)
-                .padding(8)
-                .foregroundColor(.white)
-                .background(
-                    Capsule()
-                        .fill(Color.blue)
-                )
-        }
-    }
-
 }

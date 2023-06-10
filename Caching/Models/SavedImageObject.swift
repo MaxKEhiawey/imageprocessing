@@ -13,3 +13,13 @@ class SavedImageObject: Object, Identifiable {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted var url: String
 }
+
+class ProcessedImageObject: Object, Identifiable {
+    @Persisted(primaryKey: true) var id: ObjectId
+    @Persisted var processedImageData: Data
+
+    var processedImage: UIImage {
+        get { UIImage(data: processedImageData) ?? UIImage() }
+        set { processedImageData = newValue.pngData() ?? Data() }
+    }
+}

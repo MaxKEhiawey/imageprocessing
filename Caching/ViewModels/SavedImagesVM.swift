@@ -11,7 +11,9 @@ import UIKit
 
 class SavedImagesVM: ObservableObject {
     @ObservedResults(SavedImageObject.self) var savedImagesList
+    @ObservedResults(ProcessedImageObject.self) var processedImagesList
     @Published var allSaveimages: [SavedImage] = []
+    @Published var processedImages: [ProcessedImage] = []
     private var token: NotificationToken?
     @Published var imageIndex: Int = 0
 
@@ -25,14 +27,15 @@ class SavedImagesVM: ObservableObject {
     @Published var changedImageUrl = ""
 
     init() {
-        fetchImages()
+        fetchSavedImages()
     }
     
     deinit {
         token?.invalidate()
     }
-        // fetch all saved images with 👇🏽
-    private func fetchImages() {
+
+        // fetch all saved image urls with
+    private func fetchSavedImages() {
         do {
             let realm = try Realm()
             let results = realm.objects(SavedImageObject.self)
@@ -45,7 +48,7 @@ class SavedImagesVM: ObservableObject {
             print(error)
         }
     }
-        // Delete contact
+        // Delete saved image URLs
     func remove(id: String) {
         do {
             let realm = try Realm()
@@ -59,14 +62,46 @@ class SavedImagesVM: ObservableObject {
             print(error)
         }
     }
-
-        // Update image toggle
+        // add image toggle
     func saveImage(savedImage: String) {
         let image = SavedImageObject()
         image.url = savedImage
         $savedImagesList.append(image)
     }
+        // fetch all processed image urls with
+   func fetchProcessedImages() {
+        do {
+            let realm = try Realm()
+            let results = realm.objects(ProcessedImageObject.self)
 
+            token = results.observe({ [weak self] _ in
+                self?.processedImages = results.map(ProcessedImage.init)
+                    .sorted(by: { $0.id > $1.id })
+            })
+        } catch let error {
+            print(error)
+        }
+    }
+        // add image toggle
+    func saveProcessedImage(processedImage: UIImage) {
+        let image = ProcessedImageObject()
+        image.processedImage = processedImage
+        $processedImagesList.append(image)
+    }
+        // Delete saved image URLs
+    func removeProcessed(id: String) {
+        do {
+            let realm = try Realm()
+            let objectId = try ObjectId(string: id)
+            if let image = realm.object(ofType: ProcessedImageObject.self, forPrimaryKey: objectId) {
+                try realm.write {
+                    realm.delete(image)
+                }
+            }
+        } catch let error {
+            print(error)
+        }
+    }
         // different image processing function
     func processImage(processType: ImageProcessing) {
 
@@ -97,7 +132,7 @@ class SavedImagesVM: ObservableObject {
                             }
                     case .saveImage:
                             let savedImagesViewModel = SavedImagesVM()
-                                // savedImagesViewModel.saveImage(processedImage: myUIImage)
+                               saveProcessedImage(processedImage: myUIImage)
                     }
                 }
             }
@@ -148,6 +183,7 @@ class SavedImagesVM: ObservableObject {
                 updateImage()
         }
     }
+
     private func updateImage() {
         guard let imageURL = URL(string: changedImageUrl) else {
             return

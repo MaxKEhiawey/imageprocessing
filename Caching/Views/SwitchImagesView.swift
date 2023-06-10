@@ -10,7 +10,7 @@ import SwiftUI
 struct SwitchImagesView: View {
     @ObservedObject var viewModel: SavedImagesVM
     @ObservedObject  var apiViewModel = ImageViewModel(dataService: NetworkManager())
-    @State var isDateIndex: Bool
+    @State var isDateIndex: Bool = false
     @State var imageIndex: Int = 0
     var body: some View {
         VStack {
@@ -19,14 +19,18 @@ struct SwitchImagesView: View {
                 ForEach((0..<viewModel.allSaveimages.count), id: \.self) { index in
 
                         ImageView(url: viewModel.allSaveimages[index].url)
+                        .padding(.top, 16)
                 }
             }
             Spacer()
         }
+        .padding(.leading, 8)
+        .padding(.trailing, 8)
         .onAppear {
             DispatchQueue.main.async {
               if isDateIndex {
                     viewModel.imageIndex = imageIndex
+                  isDateIndex = false
                 }
 
             }
