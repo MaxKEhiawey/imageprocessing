@@ -12,39 +12,42 @@ struct SavedImagesView: View {
     @ObservedObject  var apiViewModel = ImageViewModel(dataService: NetworkManager())
     @State private var gridLayout: [GridItem] = [ GridItem(.flexible()) ]
     @State var pageTitle: String = "Saved images"
-    let customButton = CustomButton()
+    let customView = CustomView()
     var body: some View {
 
-            ScrollView {
-                LazyVGrid(columns: Array(repeating: .init(.flexible()), count: gridLayout.count % 3 + 1), alignment: .center, spacing: 10) {
-                    ForEach(viewModel.allSaveimages, id: \.id) { savedImage in
-                       // VStack {
-                            NavigationLink {
-                                SwitchImagesView(viewModel: viewModel, isDateIndex: true, imageIndex: viewModel.allSaveimages.firstIndex(of: savedImage) ?? 0)
-                            } label: {
-                                ZStack(alignment: .topTrailing) {
-                                    ImageView(url: savedImage.url)
-                                    customButton.deleteButton {
-                                        viewModel.remove(id: savedImage.id)
+        ScrollView {
+            LazyVGrid(columns: Array(repeating: .init(.flexible()), count: gridLayout.count % 3 + 1), alignment: .center, spacing: 10) {
+                ForEach(viewModel.allSaveimages, id: \.id) { savedImage in
+                        // VStack {
+                    NavigationLink(destination: SwitchImagesView(viewModel: viewModel, isDateIndex: true, imageIndex: viewModel.allSaveimages.firstIndex(of: savedImage) ?? 0)) {
+                        ZStack(alignment: .topTrailing) {
+                            ImageView(url: savedImage.url)
+                                .onAppear {
+                                    if viewModel.allSaveimages.count == (viewModel.allSaveimages.firstIndex(of: savedImage) ?? 0) + 1 {
+                                            // apiViewModel.getImages(addImages: true)
                                     }
                                 }
+                            customView.deleteButton {
+                                viewModel.remove(id: savedImage.id)
                             }
-                    }
-                }
-
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Fire") {
-                            apiViewModel.getImages(addImages: true)
-                            print("saved ImagesCount:", viewModel.allSaveimages.count)
+                        }
                     }
                 }
             }
-        
-            .navigationBarTitle(pageTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .padding(.leading, 4)
-            .padding(.trailing, 4)
+         if apiViewModel.isLoading {
+            customView.loader(size: 2.0)
+            }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Fire") {
+                    apiViewModel.getImages(addImages: true)
+                }
+            }
+        }
+        .navigationBarTitle(pageTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .padding(.leading, 4)
+        .padding(.trailing, 4)
     }
+}

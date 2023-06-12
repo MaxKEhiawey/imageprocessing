@@ -18,7 +18,7 @@ class SavedImagesVM: ObservableObject {
     @Published var imageIndex: Int = 0
 
     private var imgUtility = ImageUtility()
-    @Published var zoomScale: CGFloat = 0.0101
+    @Published var zoomScale: CGFloat = 0.0501
     @Published var blurRadius = 0.0
     @Published var isPortrait = false
     @Published var imageDisplayed: UIImage?
@@ -127,12 +127,11 @@ class SavedImagesVM: ObservableObject {
                             blurRadius=1.0
                             myUIImage = activeImage
                     case .zoomImage:
-                            if let zoomedImage = imgUtility.zoomImage(activeImage, zoomFactor: zoomScale) {
+                            if let zoomedImage = imgUtility.zoomImage(image: activeImage, scale: zoomScale) {
                                 myUIImage = zoomedImage
                             }
                     case .saveImage:
-                            let savedImagesViewModel = SavedImagesVM()
-                               saveProcessedImage(processedImage: myUIImage)
+                         saveProcessedImage(processedImage: myUIImage)
                     }
                 }
             }

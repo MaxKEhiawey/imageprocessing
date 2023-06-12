@@ -13,7 +13,7 @@ struct EditImageView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject  var viewModel: SavedImagesVM
     @State private var play: Bool = false
-    let customButton = CustomButton()
+    let customButton = CustomView()
     var body: some View {
         ZStack {
             VStack {

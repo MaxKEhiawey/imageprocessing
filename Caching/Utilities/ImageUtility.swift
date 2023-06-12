@@ -80,29 +80,46 @@ class ImageUtility {
         return mergedImage
     }
 
-    func zoomImage(_ image: UIImage, zoomFactor: CGFloat) -> UIImage? {
-        guard let ciImage = CIImage(image: image),
-              let scaleFilter = CIFilter(name: "CILanczosScaleTransform") else {
+    func zoomImage(image: UIImage, scale: CGFloat) -> UIImage? {
+        guard let ciImage = CIImage(image: image) else {
             return nil
         }
 
-            // Set the input image
-        scaleFilter.setValue(ciImage, forKey: kCIInputImageKey)
+        let scaleX = scale
+        let scaleY = scale
+        let scaledImage = ciImage.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
 
-            // Set the zoom scale
-        scaleFilter.setValue(zoomFactor, forKey: kCIInputScaleKey)
-
-            // Apply the scale transformation
-        guard let outputImage = scaleFilter.outputImage,
-              let cgImage = CIContext().createCGImage(outputImage, from: outputImage.extent) else {
+        let context = CIContext(options: nil)
+        guard let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
             return nil
         }
 
-            // Create a new UIImage from the scaled CGImage
         let zoomedImage = UIImage(cgImage: cgImage)
-
         return zoomedImage
     }
+//    func zoomImage(_ image: UIImage, zoomFactor: CGFloat) -> UIImage? {
+//        guard let ciImage = CIImage(image: image),
+//              let scaleFilter = CIFilter(name: "CILanczosScaleTransform") else {
+//            return nil
+//        }
+//
+//            // Set the input image
+//        scaleFilter.setValue(ciImage, forKey: kCIInputImageKey)
+//
+//            // Set the zoom scale
+//        scaleFilter.setValue(zoomFactor, forKey: kCIInputScaleKey)
+//
+//            // Apply the scale transformation
+//        guard let outputImage = scaleFilter.outputImage,
+//              let cgImage = CIContext().createCGImage(outputImage, from: outputImage.extent) else {
+//            return nil
+//        }
+//
+//            // Create a new UIImage from the scaled CGImage
+//        let zoomedImage = UIImage(cgImage: cgImage)
+//
+//        return zoomedImage
+//    }
     func rotationImage(image: UIImage, rotation: UIImage.Orientation) -> UIImage? {
         guard let cgImage = image.cgImage else {
             return nil

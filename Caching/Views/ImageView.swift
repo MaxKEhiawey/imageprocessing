@@ -12,32 +12,19 @@ import SwiftUI
         @State var imageDisplay: UIImage?
         var body: some View {
             VStack {
-                if let imageDisplay {
-                    Image(uiImage: imageDisplay)
-                        .resizable()
-                        .frame(height: 240)
+                if let url = URL(string: url) {
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .frame(height: 240) // Adjust the width and height as needed
+                    } placeholder: {
+                    // Placeholder view or activity indicator while loading
+                        CustomView().loader(size: 1.0)
+                    }
                 } else {
-                    ProgressView()
+                    CustomView().loader(size: 2.0)
                 }
-            }
-
-            .onAppear {
-                updateImage()
             }
             .padding(.all, 4)
-        }
-        private func updateImage() {
-
-            guard let imageURL = URL(string: url) else {
-                return
-            }
-            URLSession.shared.dataTask(with: imageURL) { data, _, error in
-                guard let data = data, error == nil else {
-                    return
-                }
-                DispatchQueue.main.async {
-                    self.imageDisplay = UIImage(data: data)
-                }
-            }.resume()
         }
     }

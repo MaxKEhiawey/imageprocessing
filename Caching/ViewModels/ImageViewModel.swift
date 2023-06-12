@@ -10,19 +10,15 @@ import UIKit
 
 class ImageViewModel: ObservableObject {
     @Published var images: [UnsplashImage] = []
-    @Published var isLoading = true
+    @Published var isLoading = false
     var networkManager = NetworkManager()
     init(dataService: NetworkManager) {
         self.networkManager = dataService
-        self.getImages()
     }
     var cancellables = Set<AnyCancellable>()
     
     func getImages(addImages: Bool = false) {
-
-        if images.isEmpty {
             self.isLoading = true
-        }
         networkManager.getImages()
             .sink { _ in
                 self.isLoading = false
