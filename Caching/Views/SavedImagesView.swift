@@ -24,7 +24,7 @@ struct SavedImagesView: View {
                             ImageView(url: savedImage.url)
                                 .onAppear {
                                     if viewModel.allSaveimages.count == (viewModel.allSaveimages.firstIndex(of: savedImage) ?? 0) + 1 {
-                                            // apiViewModel.getImages(addImages: true)
+                                          apiViewModel.getImages(addImages: true)
                                     }
                                 }
                             customView.deleteButton {
@@ -40,8 +40,13 @@ struct SavedImagesView: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Fire") {
+                Button("Fetch") {
                     apiViewModel.getImages(addImages: true)
+                }
+                .onAppear {
+                    if viewModel.allSaveimages.isEmpty {
+                        apiViewModel.getImages(addImages: true)
+                    }
                 }
             }
         }

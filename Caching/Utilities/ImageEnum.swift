@@ -22,4 +22,5 @@ enum Frame: String {
     case darkWood = "DarkWoodFrame"
     case goldFrame = "GoldFrame"
     case lightWood = "LightWoodFrame"
+    case clear = "Clear"
 }

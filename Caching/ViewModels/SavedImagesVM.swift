@@ -16,7 +16,7 @@ class SavedImagesVM: ObservableObject {
     @Published var processedImages: [ProcessedImage] = []
     private var token: NotificationToken?
     @Published var imageIndex: Int = 0
-
+    @Published var addedFrame: (Frame, Bool) = (.clear, false)
     private var imgUtility = ImageUtility()
     @Published var zoomScale: CGFloat = 0.0501
     @Published var blurRadius = 0.0
@@ -103,21 +103,22 @@ class SavedImagesVM: ObservableObject {
         }
     }
         // different image processing function
-    func processImage(processType: ImageProcessing) {
+    func processImage(processType: ImageProcessing, isFrame: Bool = false) {
 
         if let activeImage = originalImage {
             DispatchQueue.global().async {
                 DispatchQueue.main.async { [self] in
                     switch processType {
                     case .addFrame(type: let type):
-                            selectFrame(type, mainImage: activeImage)
+                            addedFrame = (type, type == .clear)
                     case .blurImage:
                             if let imageBlur = imgUtility.applyBlurToImage(activeImage, withRadius: blurRadius) {
                                 myUIImage = imageBlur
                             }
                     case .orientation(isLeftLandscape: let isLeftLandscape, isPortrait: let isPortrait):
                             if isPortrait {
-                                myUIImage = myUIImage
+                                myUIImage = activeImage
+                            } else {
                                 if let changedImage = imgUtility.changeImageOrientation(activeImage, isPortrait: isLeftLandscape) {
                                     myUIImage = changedImage
                                 }
@@ -131,6 +132,9 @@ class SavedImagesVM: ObservableObject {
                                 myUIImage = zoomedImage
                             }
                     case .saveImage:
+                            if !addedFrame.1 {
+                                selectFrame(addedFrame.0, mainImage: myUIImage)
+                            }
                          saveProcessedImage(processedImage: myUIImage)
                     }
                 }
@@ -166,6 +170,8 @@ class SavedImagesVM: ObservableObject {
                 addFrame(frame: .goldFrame, mainImage: mainImage)
         case .lightWood:
                 addFrame(frame: .lightWood, mainImage: mainImage)
+        case .clear:
+                addFrame(frame: .clear, mainImage: mainImage)
         }
     }
 

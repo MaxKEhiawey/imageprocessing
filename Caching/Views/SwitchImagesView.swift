@@ -34,7 +34,6 @@ struct SwitchImagesView: View {
                 }
 
             }
-            print("allImages count:", viewModel.allSaveimages.count, imageIndex)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
