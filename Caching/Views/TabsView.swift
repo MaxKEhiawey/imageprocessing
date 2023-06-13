@@ -11,21 +11,20 @@ struct TabsView: View {
     @State  var selectedTab = 0
     var body: some View {
         TabView(selection: $selectedTab) {
-            ImageListView()
+            SavedImagesView()
             .tabItem {
-                Image(systemName: "photo")
-                Text("List")
+                Image(systemName: "house")
+                Text("Home")
             }
             .tag(0)
 
             SavedImagesView()
             .tabItem {
                 Image(systemName: "photo")
-                Text("Saved")
+                Text("Saved images")
             }
             .tag(1)
     }
     .navigationBarBackButtonHidden(true)
     }
 }
-

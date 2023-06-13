@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import CoreImage
 
-class ImageUtilities: ObservableObject {
+class ImageUtility {
     var images: [UIImage] = []
 
     func applyMotionBlur(to image: UIImage, blurRadius: CGFloat, angle: CGFloat) -> UIImage {
@@ -80,18 +80,46 @@ class ImageUtilities: ObservableObject {
         return mergedImage
     }
 
-    func applyZoomEffect(image: UIImage, zoomScale: CGFloat) -> UIImage? {
-        let newSize = CGSize(width: image.size.width * zoomScale, height: image.size.height * zoomScale)
-        let newRect = CGRect(origin: .zero, size: newSize)
+    func zoomImage(image: UIImage, scale: CGFloat) -> UIImage? {
+        guard let ciImage = CIImage(image: image) else {
+            return nil
+        }
 
-        UIGraphicsBeginImageContextWithOptions(newSize, false, UIScreen.main.scale)
-        defer { UIGraphicsEndImageContext() }
+        let scaleX = scale
+        let scaleY = scale
+        let scaledImage = ciImage.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
 
-        image.draw(in: newRect)
+        let context = CIContext(options: nil)
+        guard let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
+            return nil
+        }
 
-        return UIGraphicsGetImageFromCurrentImageContext()
+        let zoomedImage = UIImage(cgImage: cgImage)
+        return zoomedImage
     }
-
+//    func zoomImage(_ image: UIImage, zoomFactor: CGFloat) -> UIImage? {
+//        guard let ciImage = CIImage(image: image),
+//              let scaleFilter = CIFilter(name: "CILanczosScaleTransform") else {
+//            return nil
+//        }
+//
+//            // Set the input image
+//        scaleFilter.setValue(ciImage, forKey: kCIInputImageKey)
+//
+//            // Set the zoom scale
+//        scaleFilter.setValue(zoomFactor, forKey: kCIInputScaleKey)
+//
+//            // Apply the scale transformation
+//        guard let outputImage = scaleFilter.outputImage,
+//              let cgImage = CIContext().createCGImage(outputImage, from: outputImage.extent) else {
+//            return nil
+//        }
+//
+//            // Create a new UIImage from the scaled CGImage
+//        let zoomedImage = UIImage(cgImage: cgImage)
+//
+//        return zoomedImage
+//    }
     func rotationImage(image: UIImage, rotation: UIImage.Orientation) -> UIImage? {
         guard let cgImage = image.cgImage else {
             return nil
@@ -101,7 +129,9 @@ class ImageUtilities: ObservableObject {
         let imageRect = CGRect(origin: .zero, size: imageSize)
         let colorSpace = CGColorSpaceCreateDeviceRGB()
 
-        guard let context = CGContext(data: nil, width: Int(imageSize.width), height: Int(imageSize.height), bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+        guard let context = CGContext(data: nil, width: Int(imageSize.width),
+                                      height: Int(imageSize.height), bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+        else {
             return nil
         }
 
@@ -120,15 +150,15 @@ class ImageUtilities: ObservableObject {
         var transform: CGAffineTransform = .identity
 
         switch orientation {
-            case .portrait:
+        case .portrait:
                 transform = CGAffineTransform.identity
-            case .portraitUpsideDown:
+        case .portraitUpsideDown:
                 transform = CGAffineTransform.identity
-            case .landscapeRight:
+        case .landscapeRight:
                 transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-            case .landscapeLeft:
+        case .landscapeLeft:
                 transform = CGAffineTransform.identity
-            default:
+        default:
                 return nil
         }
 
@@ -146,5 +176,31 @@ class ImageUtilities: ObservableObject {
 
         return newImage
     }
+    func changeImageOrientation(_ image: UIImage, isPortrait: Bool) -> UIImage? {
+        let ciImage = CIImage(image: image)
 
+            // Create an affine transform based on the desired orientation
+        var transform = CGAffineTransform.identity
+        if isPortrait {
+            transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2) // 90 degrees clockwise rotation
+        } else {
+            transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2) // 90 degrees counter-clockwise rotation
+        }
+
+            // Apply the transform using the CIAffineTransform filter
+        let transformFilter = CIFilter(name: "CIAffineTransform")
+        transformFilter?.setValue(ciImage, forKey: kCIInputImageKey)
+        transformFilter?.setValue(NSValue(cgAffineTransform: transform), forKey: kCIInputTransformKey)
+
+        guard let outputImage = transformFilter?.outputImage else {
+            return nil
+        }
+
+        let context = CIContext(options: nil)
+        guard let cgImage = context.createCGImage(outputImage, from: outputImage.extent) else {
+            return nil
+        }
+
+        return UIImage(cgImage: cgImage)
+    }
 }

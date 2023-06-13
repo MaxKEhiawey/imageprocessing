@@ -19,12 +19,10 @@ class CacheManager {
     }()
     
     func add(key: String, image: UIImage) {
-        print("added to cache: \(key)")
         imageCache.setObject(image, forKey: key as NSString)
      }
     
     func get( key: String) -> UIImage? {
-        print("got from cache: \(key)")
        return  imageCache.object(forKey: key as NSString)
     }
 }

@@ -6,35 +6,26 @@
 //
 
 import SwiftUI
-import Combine
 
     struct ImageView: View {
-    
-        @StateObject var imageLoader: ImageLoaderVM
-        @StateObject var stateManager: ImageViewStateManager
-        
-        init(imageUrl: String, key: String) {
-            _imageLoader = StateObject(wrappedValue: ImageLoaderVM(url: URL(string: imageUrl)!, key: key))
-            _stateManager = StateObject(wrappedValue: ImageViewStateManager(url: URL(string: imageUrl), key: key))
-        }
-        
+        @State var url: String
+        @State var imageDisplay: UIImage?
+        @State var frame: CGFloat = 240
         var body: some View {
             VStack {
-                if imageLoader.isLoading {
-                    ProgressView()
+                if let url = URL(string: url) {
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .frame(height: frame) // Adjust the width and height as needed
+                    } placeholder: {
+                    // Placeholder view or activity indicator while loading
+                        CustomView().loader(size: 1.0)
+                    }
                 } else {
-                    Image(uiImage: imageLoader.image ?? UIImage(systemName: "photo")!)
-                        .resizable()
-                 }
+                    CustomView().loader(size: 2.0)
+                }
             }
-            .frame(height: 200)
             .padding(.all, 4)
-            .onDisappear {
-                    // Save state
-                stateManager.url = imageLoader.url
-                stateManager.key = imageLoader.imgKey
-            }
         }
     }
-    
-  
