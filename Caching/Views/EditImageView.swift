@@ -13,7 +13,7 @@ struct EditImageView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject  var viewModel: SavedImagesVM
     @State private var play: Bool = false
-    let customButton = CustomButton()
+    let customButton = CustomView()
     var body: some View {
         ZStack {
             VStack {
@@ -46,7 +46,13 @@ struct EditImageView: View {
                             }
                             customButton.capsuleButton(label: "LightWoodFrame") {
                                 viewModel.processImage(processType: .addFrame(type: .lightWood))
-                            }}, label: {
+                                
+                            }
+                            customButton.capsuleButton(label: "Clear") {
+                                viewModel.processImage(processType: .addFrame(type: .clear))
+                            }
+
+                        }, label: {
                                 customButton.capsuleButton(label: "Select a frame") {}
                             })
                         //: orientation
@@ -79,10 +85,17 @@ struct EditImageView: View {
                 }
                 .padding()
                 //: Image in View
-                Image(uiImage: viewModel.myUIImage)
-                    .resizable()
-                    .frame(height: 400)
-                    .padding()
+                ZStack {
+                    Image(uiImage: viewModel.myUIImage)
+                        .resizable()
+                        .frame(height: 400)
+                        .padding()
+                    Image(viewModel.addedFrame.0.rawValue)
+                        .resizable()
+                        .frame(height: 400)
+                        .padding()
+                        .opacity(viewModel.addedFrame.1 ? 0: 1)
+                }
                 //: Button to revert to original image
                 HStack {
                     customButton.capsuleButton(label: "Revert to Original") {

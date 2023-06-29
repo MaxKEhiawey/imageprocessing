@@ -11,7 +11,7 @@ import UIKit
 struct ProcessedImageView: View {
     @StateObject private var viewModel = SavedImagesVM()
     @State private var gridLayout: [GridItem] = [ GridItem(.flexible())]
-    let customButton = CustomButton()
+    let customButton = CustomView()
     @State private var currentPage = 0
     var body: some View {
         ScrollView {

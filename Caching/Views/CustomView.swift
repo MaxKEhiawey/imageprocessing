@@ -1,5 +1,5 @@
 //
-//  CustomButtonsView.swift
+//  CustomView.swift
 //  Caching
 //
 //  Created by AMALITECH MACBOOK on 10/06/2023.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CustomButton {
+struct CustomView {
 
         // custom capsule button
     func capsuleButton(label: String, action: @escaping () -> Void) -> some View {
@@ -32,6 +32,15 @@ struct CustomButton {
                 .cornerRadius(20)
                 .padding(.top, 8)
                 .padding(.trailing, 8)
+        }
+    }
+        // custom loader
+    func loader(size of: Double) -> some View {
+        return VStack {
+                ProgressView(value: 0.10)
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .scaleEffect(of) // Adjust the scale factor as needed
+                    .padding()
         }
     }
 }

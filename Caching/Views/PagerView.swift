@@ -68,7 +68,6 @@ struct PagerView<Content: View>: View {
             )
         }
         .onChange(of: currentIndex, perform: { value in
-            print("index changed")
 
                 // this is probably animated twice, if the tab change occurs because of the drag gesture
             withAnimation(.easeOut) {
