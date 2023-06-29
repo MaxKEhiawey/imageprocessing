@@ -112,7 +112,7 @@ class SavedImagesVM: ObservableObject {
                     case .addFrame(type: let type):
                             addedFrame = (type, type == .clear)
                     case .blurImage:
-                            if let imageBlur = imgUtility.applyBlurToImage(activeImage, withRadius: blurRadius) {
+                            if let imageBlur = imgUtility.applyBlurToImage(myUIImage, withRadius: blurRadius) {
                                 myUIImage = imageBlur
                             }
                     case .orientation(isLeftLandscape: let isLeftLandscape, isPortrait: let isPortrait):
